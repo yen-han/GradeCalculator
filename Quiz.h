@@ -4,7 +4,6 @@ namespace yh {
    class Quiz {
       int m_courseCode;
       char* m_quizName;
-      char m_unit[4];
       double m_currentMark;
       double m_weighted;
       double m_max;
@@ -14,8 +13,8 @@ namespace yh {
       Quiz(const char* quizName, double weighted=1, double currentMark=0, double max=100);
       Quiz();
       ~Quiz();
+      Quiz& setInfo(const char* quizName, double weighted = 1, double currentMark = 0, double max = 100);
       Quiz& setQuizName(const char* quizName);
-      void setUnit(const char unit);
       Quiz& setCurrentMark(double mark);
       Quiz& setWeighted(double maxMark);
       Quiz& setMax(double maxMark);
@@ -25,8 +24,8 @@ namespace yh {
       double getMaxMark() const;
       double getWeighted() const;
       double getTotal() const;
-      void display() const;
-      void isValid() const;
+      std::ostream& display() const;
+      bool isValid() const;
 
    };
 }

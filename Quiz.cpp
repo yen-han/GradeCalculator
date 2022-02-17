@@ -6,11 +6,10 @@
 #include "commonFunctions.h"
 using namespace std;
 namespace yh {
-   Quiz* quiz = nullptr;
+
    void Quiz::resetInfo() {
       m_courseCode=0;
       m_quizName=nullptr;
-      m_unit[0]= 0;
       m_currentMark=-1; // possibly 0
       m_max=0;
    }
@@ -33,6 +32,17 @@ namespace yh {
       }
    }
 
+   Quiz& Quiz::setInfo(const char* quizName, double weighted, double currentMark, double max) {
+      resetInfo();
+      if (quizName != nullptr) {
+         setQuizName(quizName);
+         setCurrentMark(currentMark);
+         setMax(max);
+         setWeighted(weighted);
+      }
+      return *this;
+   }
+
    Quiz::~Quiz() {
       delete[] m_quizName;
       m_quizName = nullptr;
@@ -44,9 +54,6 @@ namespace yh {
          strcpy(m_quizName, quizName);
       }
       return *this;
-   }
-
-   void Quiz::setUnit(const char unit) {
    }
 
    Quiz& Quiz::setCurrentMark(double mark) {
@@ -85,14 +92,12 @@ namespace yh {
       return (m_currentMark / m_max * m_weighted); 
    }
 
-
    void Quiz::remaingMarkToPass() {
    }
 
-
-   void Quiz::display() const {
+   ostream& Quiz::display() const {
       cout << "Quiz Name : " << getQuizName() <<endl;
-      cout << "Mark      : " << getCurrentMark() << endl;
+      cout << "Score     : " << getCurrentMark() << endl;
       cout << "Max       : " << getMaxMark() << endl;
       cout << "Weighted  : " << getWeighted()<<endl;
       cout << "---------------------" << endl;
@@ -101,9 +106,11 @@ namespace yh {
       cout << "Total     : " << getTotal() <<  " % " << endl;
       cout.unsetf(ios::fixed);
       cout << endl;
+      return cout;
    }
 
-   void Quiz::isValid() const {
+   bool Quiz::isValid() const {
+      return m_currentMark >= 0;
    }
 
 }

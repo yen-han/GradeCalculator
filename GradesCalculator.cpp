@@ -4,22 +4,13 @@
 using namespace std;
 using namespace yh;
 void mainMenu();
-//int subjectMenu();
+bool subjectMenu();
+void setQuiz();
+
 int main() {
    // Read Excel file
    //main menu
-   int numQuiz=1;
    mainMenu();
-   //cout << "How many Quiz do you have? ";
-   //cin >> numQuiz;
-   Quiz quiz[2] = { { "Quiz1", 1.875, 11 , 12},
-            { "Quiz2", 1.875, 7 , 9} };
-   quiz[0].display();
-   quiz[1].display();
-   cout << endl;
-   double total;
-   total = quiz[0].getTotal()+ quiz[1].getTotal();
-   cout << "QUIZ TOTAL: " <<total <<" / 15 %" << endl;
    //setCurrentMark();
    // Write excel file
    // Close file
@@ -29,42 +20,78 @@ int main() {
 void mainMenu() {
    
    cout << "Grades Calculator" << endl;
-   cout << "subject : OOP244" << endl << endl;
+   cout << "subject : OOP244" << endl;
    //cout << "Select subject : " << endl;
    //cin >> input;
+   subjectMenu();
 }
-//
-//// subject menu 1. view 2. set 3. check requirement to pass
-//int subjectMenu() {
-//   int input;
-//   bool exit;
-//   do {
-//      exit = true;
-//      cout << "=================" << endl;
-//      cout << "1. View grades" << endl;
-//      cout << "2. Modify new grades" << endl;
-//      cout << "3. Requirement to Pass" << endl;
-//      cout << "0. Exit" << endl;
-//      cin >> input;
-//
-//      switch (input) {
-//         // 1. View grades
-//      case 1:
-//         break;
-//         // 2. Set grades
-//      case 2:
-//         break;
-//         //3. Requirement to Pass
-//      case 3:
-//         break;
-//         // 0. Exit
-//      case 0:
-//         exit = false;
-//         break;
-//      }
-//   } while (exit);
-//   return input;
-//}
+
+// subject menu 1. view 2. set 3. check requirement to pass
+bool subjectMenu() {
+   int input;
+   bool exit;
+   do {
+      exit = true;
+      cout << "=================" << endl;
+      cout << "1. View grades" << endl;
+      cout << "2. Modify new grades" << endl;
+      cout << "3. Requirement to Pass" << endl;
+      cout << "0. Exit" << endl ;
+      cout << ">>> ";
+      cin >> input;
+
+      switch (input) {
+      // 1. View grades
+      case 1:
+         cout << "unavailable" << endl;
+         break;
+      // 2. Set grades
+      case 2:
+         setQuiz();
+         break;
+      //3. Requirement to Pass
+      case 3:
+         cout << "unavailable" << endl;
+         break;
+      // 0. Exit
+      case 0:
+         exit = false;
+         break;
+      }
+   } while (exit);
+   return exit;
+}
+
+void setQuiz() {
+   int numQuiz;
+   char quizName[20];
+   double score, max, weighted;
+   double total = 0;
+   Quiz* quiz = nullptr;
+   cout << "How many Quiz do you have? ";
+   cin >> numQuiz;
+   quiz = new Quiz[numQuiz];
+   for (int i = 0; i < numQuiz; i++) {
+      cout << "Quiz Name : ";
+      cin >> quizName;
+      cout << "Score     : ";
+      cin >> score;
+      cout << "Max       : ";
+      cin >> max;
+      cout << "Weighted  : ";
+      cin >> weighted;
+      cout << endl;
+      quiz[i].setInfo(quizName, weighted, score, max);
+   }
+   for (int i = 0; i < numQuiz; i++) {
+      quiz[i].display() << endl;
+   }
+
+   for (int i = 0; i < numQuiz; i++) {
+      total += quiz[i].getTotal();
+   }
+   cout << "QUIZ TOTAL: " << total << " / 15 %" << endl;
+}
 
 // viewSubject menu 1. total(how much left to pass) 2. Quizes 3. Assignments 4. Tests 5. check requirement to pass 0. Exit
 
