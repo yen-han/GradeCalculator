@@ -10,6 +10,7 @@ namespace yh {
       void resetInfo();
 
    public:
+      bool read(FILE* fptr);
       Quiz(const char* quizName, double weighted=1, double currentMark=0, double max=100);
       Quiz();
       ~Quiz();
@@ -28,6 +29,7 @@ namespace yh {
       bool isValid() const;
 
    };
+   //extern bool read(FILE* fptr);
 }
 
 #endif // !YH_QUIZ_H_

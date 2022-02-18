@@ -1,6 +1,7 @@
 // Create, Read, Update, Delete
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <cstdio>
 #include <cstring>
 #include "Quiz.h"
 #include "commonFunctions.h"
@@ -13,10 +14,6 @@ namespace yh {
       m_currentMark=-1; // possibly 0
       m_max=0;
    }
-
-   //Quiz::Quiz(int num) {
-   //   quiz = new Quiz[num];
-   //}
 
    Quiz::Quiz() {
       resetInfo();
@@ -32,6 +29,10 @@ namespace yh {
       }
    }
 
+   Quiz::~Quiz() {
+      delete[] m_quizName;
+      m_quizName = nullptr;
+   }
    Quiz& Quiz::setInfo(const char* quizName, double weighted, double currentMark, double max) {
       resetInfo();
       if (quizName != nullptr) {
@@ -41,11 +42,6 @@ namespace yh {
          setWeighted(weighted);
       }
       return *this;
-   }
-
-   Quiz::~Quiz() {
-      delete[] m_quizName;
-      m_quizName = nullptr;
    }
 
    Quiz& Quiz::setQuizName(const char* quizName) {
