@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include "commonFunctions.h"
 #include "Quiz.h"
 
 using namespace std;
@@ -10,8 +11,10 @@ using namespace yh;
 void mainMenu();
 bool subjectMenu();
 void readRequirement();
+char searchSubject[10];
 
 int main() {
+
    //main menu
    mainMenu();
 
@@ -19,11 +22,12 @@ int main() {
 }
 
 void mainMenu() {
-
+   char inputSubject[10];
    cout << "Grades Calculator" << endl;
-   cout << "subject : OOP244" << endl;
-   //cout << "Select subject : " << endl;
-   //cin >> input;
+   //cout << "subject : OOP244" << endl;
+   cout << "subject : ";
+   cin >> inputSubject;
+   toUpper(searchSubject,inputSubject);
    subjectMenu();
 }
 
@@ -45,7 +49,6 @@ bool subjectMenu() {
          // 1. View grades
       case 1:
          readQuiz();
-         cout << "unavailable" << endl;
          break;
 
       // 2. Set grades
@@ -76,41 +79,41 @@ void readRequirement() {
    bool found = false;
    if (fptr != nullptr) {
 
-      cout << "Requirements for OOP244" << endl;
+      cout << "Requirements for " << searchSubject << endl;
       cout << "-----------------------" << endl;
       while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
-         if (strstr(subject, "ABC") != nullptr) {
+         if (strstr(subject, searchSubject) != nullptr) {
             cout << requirement << endl;
             found = true;
          }
       }
-   }
-   cout << endl;
-   //rewind(fptr);
-   fclose(fptr);
-   fptr = nullptr;
-   if (!found) {
-      //bool finished = false;
-      char answer;
-      char add;
-      cout << "Requirement not Found" << endl;
-      cout << "Do you want to add? (Y/N)" << endl << ">>>";
-      cin >> answer;
-      cin.ignore();
-      if (answer == 'Y' || answer == 'y') {
-         do {
-            cout << "Subject name: ";
-            cin.getline(subject, 10);
-            cout << "Requirement to Pass: ";
-            cin.getline(requirement, 50);
-            fptr = fopen("requirement.csv", "a");
-            fprintf(fptr, "%s,%s\n", subject, requirement);
-            cout << "Do you have more? (Y/N)" << endl << ">>>";
-            cin.get(add);
-            cin.ignore();
-         } while (add == 'Y' || add == 'y');
-         fclose(fptr);
-         fptr = nullptr;
+      cout << endl;
+      //rewind(fptr);
+      fclose(fptr);
+      fptr = nullptr;
+      if (!found) {
+         //bool finished = false;
+         char answer;
+         char add;
+         cout << "Requirement not Found" << endl;
+         cout << "Do you want to add? (Y/N)" << endl << ">>>";
+         cin >> answer;
+         cin.ignore();
+         if (answer == 'Y' || answer == 'y') {
+            do {
+               /*cout << "Subject name: ";
+               cin.getline(subject, 10);*/
+               cout << "Requirement to Pass: ";
+               cin.getline(requirement, 50);
+               fptr = fopen("requirement.csv", "a");
+               fprintf(fptr, "%s,%s\n", searchSubject, requirement);
+               cout << "Do you have more? (Y/N)" << endl << ">>>";
+               cin.get(add);
+               cin.ignore();
+            } while (add == 'Y' || add == 'y');
+            fclose(fptr);
+            fptr = nullptr;
+         }
       }
    }
    else {

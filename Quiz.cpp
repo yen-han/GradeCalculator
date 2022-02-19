@@ -139,7 +139,7 @@ namespace yh {
          }
          if (finished) {
             for (int i = 0; i < numQuiz; i++) {
-               quiz[i].display() << endl;
+               quiz[i].display();
             }
             for (int i = 0; i < numQuiz; i++) {
                total += quiz[i].getTotal();
