@@ -29,7 +29,8 @@ namespace yh {
       bool isValid() const;
 
    };
-   //extern bool read(FILE* fptr);
+   extern bool readQuiz();
+   extern void setQuiz();
 }
 
 #endif // !YH_QUIZ_H_

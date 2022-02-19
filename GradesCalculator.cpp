@@ -1,14 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include "Quiz.h"
 
 using namespace std;
 using namespace yh;
+
 void mainMenu();
 bool subjectMenu();
-void setQuiz();
-bool read();
+void readRequirement();
 
 int main() {
    //main menu
@@ -43,7 +44,7 @@ bool subjectMenu() {
       switch (input) {
          // 1. View grades
       case 1:
-         read();
+         readQuiz();
          cout << "unavailable" << endl;
          break;
 
@@ -54,8 +55,10 @@ bool subjectMenu() {
 
          //3. Requirement to Pass
       case 3:
-         cout << "unavailable" << endl;
+         cout << endl;
+         readRequirement();
          break;
+
          // 0. Exit
       case 0:
          exit = false;
@@ -65,97 +68,31 @@ bool subjectMenu() {
    return exit;
 }
 
-bool read() {
-   bool finished = false;
-   double total=0;
+void readRequirement() {
    FILE* fptr = nullptr;
-   fptr = fopen("quiz.csv", "r");
+   fptr = fopen("requirement.csv", "r");
    if (fptr != nullptr) {
-      // Read comma deliminated file
-      char quizName[20];
-      double score = 0, max = 0, weighted = 0;
-      Quiz* quiz = nullptr;
-      int numQuiz = 0;
-      int sizeQuiz = 5;
-      quiz = new Quiz[sizeQuiz];
-      while (fscanf(fptr, "%[^,],%lf,%lf,%lf\n", quizName, &weighted, &score, &max) == 4) {
-         if (numQuiz == sizeQuiz) {
-            Quiz* tempQuiz = nullptr;
-            tempQuiz = new Quiz[sizeQuiz + numQuiz];
-            for (int i = 0; i < sizeQuiz; i++) {
-               tempQuiz[i] = quiz[i];
-            }
-            delete[] quiz;
-            quiz = tempQuiz;
-            sizeQuiz += numQuiz;
+      char subject[10];
+      char requirement[100];
+      bool found = false;
+      cout << "Requirements for OOP244" << endl;
+      cout << "-----------------------" << endl;
+      while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
+         if (strstr(subject, "OOP244") != nullptr) {
+            cout << requirement << endl;
+            found = true;
          }
-         quiz[numQuiz].setInfo(quizName, weighted, score, max);
-         numQuiz++;
-         finished = true;
       }
-      if (finished) {
-         for (int i = 0; i < numQuiz; i++) {
-            quiz[i].display() << endl;
-         }
-         for (int i = 0; i < numQuiz; i++) {
-            total += quiz[i].getTotal();
-         }
-         cout << "QUIZ TOTAL: " << total << " / 15 %" << endl << endl;
+      if(!found) {
+         cout << "Requirement not Found" << endl;
       }
-      else {
-         setQuiz();
-      }
-      // Close file
-      fclose(fptr);
-      fptr = nullptr;
-
-   }
-   else {
-      cout << "ERROR: File inaccesible";
-   }
-   return finished;
-}
-
-void setQuiz() {
-   int numQuiz;
-   char quizName[20];
-   double score, max, weighted;
-   double total = 0;
-   Quiz* quiz = nullptr;
-   cout << "How many Quiz do you have? ";
-   cin >> numQuiz;
-   quiz = new Quiz[numQuiz];
-   for (int i = 0; i < numQuiz; i++) {
-      cout << "Quiz Name : ";
-      cin >> quizName;
-      cout << "Score     : ";
-      cin >> score;
-      cout << "Max       : ";
-      cin >> max;
-      cout << "Weighted  : ";
-      cin >> weighted;
       cout << endl;
-      quiz[i].setInfo(quizName, weighted, score, max);
-   }
-   for (int i = 0; i < numQuiz; i++) {
-      quiz[i].display() << endl;
-   }
-
-   for (int i = 0; i < numQuiz; i++) {
-      total += quiz[i].getTotal();
-   }
-   cout << "QUIZ TOTAL: " << total << " / 15 %" << endl<<endl;
-   FILE* fptr=nullptr;
-   fptr = fopen("quiz.csv", "w");
-   if (fptr != nullptr) {
-      for (int i = 0; i < numQuiz; i++) {
-         fprintf(fptr, "%s,%lf,%lf,%lf\n", quiz[i].getQuizName(), quiz[i].getWeighted(), quiz[i].getCurrentMark(), quiz[i].getMaxMark());
-      }
+      //rewind(fptr);
       fclose(fptr);
       fptr = nullptr;
    }
    else {
-      cout << "ERROR: Can not write the data"<<endl;
+      cout << "FILE NOT FOUND" << endl;
    }
 }
 

@@ -109,4 +109,98 @@ namespace yh {
       return m_currentMark >= 0;
    }
 
+   bool readQuiz() {
+      bool finished = false;
+      double total = 0;
+      FILE* fptr = nullptr;
+      fptr = fopen("quiz.csv", "r");
+      if (fptr != nullptr) {
+         // Read comma deliminated file
+         char quizName[20];
+         double score = 0, max = 0, weighted = 0;
+         Quiz* quiz = nullptr;
+         int numQuiz = 0;
+         int sizeQuiz = 5;
+         quiz = new Quiz[sizeQuiz];
+         while (fscanf(fptr, "%[^,],%lf,%lf,%lf\n", quizName, &weighted, &score, &max) == 4) {
+            if (numQuiz == sizeQuiz) {
+               Quiz* tempQuiz = nullptr;
+               tempQuiz = new Quiz[(sizeQuiz + numQuiz)];
+               for (int i = 0; i < sizeQuiz; i++) {
+                  tempQuiz[i] = quiz[i];
+               }
+               delete[] quiz;
+               quiz = tempQuiz;
+               sizeQuiz += numQuiz;
+            }
+            quiz[numQuiz].setInfo(quizName, weighted, score, max);
+            numQuiz++;
+            finished = true;
+         }
+         if (finished) {
+            for (int i = 0; i < numQuiz; i++) {
+               quiz[i].display() << endl;
+            }
+            for (int i = 0; i < numQuiz; i++) {
+               total += quiz[i].getTotal();
+            }
+            cout << "QUIZ TOTAL: " << total << " / 15 %" << endl << endl;
+         }
+         else {
+            setQuiz();
+         }
+         // Close file
+         fclose(fptr);
+         fptr = nullptr;
+
+      }
+      else {
+         cout << "ERROR: File inaccesible";
+      }
+      return finished;
+   }
+
+   void setQuiz() {
+      int numQuiz;
+      char quizName[20];
+      double score, max, weighted;
+      double total = 0;
+      Quiz* quiz = nullptr;
+      cout << "How many Quiz do you have? ";
+      cin >> numQuiz;
+      quiz = new Quiz[numQuiz];
+      for (int i = 0; i < numQuiz; i++) {
+         cout << "Quiz Name : ";
+         cin >> quizName;
+         cout << "Score     : ";
+         cin >> score;
+         cout << "Max       : ";
+         cin >> max;
+         cout << "Weighted  : ";
+         cin >> weighted;
+         cout << endl;
+         quiz[i].setInfo(quizName, weighted, score, max);
+      }
+      for (int i = 0; i < numQuiz; i++) {
+         quiz[i].display() << endl;
+      }
+
+      for (int i = 0; i < numQuiz; i++) {
+         total += quiz[i].getTotal();
+      }
+      cout << "QUIZ TOTAL: " << total << " / 15 %" << endl << endl;
+      FILE* fptr = nullptr;
+      fptr = fopen("quiz.csv", "w");
+      if (fptr != nullptr) {
+         for (int i = 0; i < numQuiz; i++) {
+            fprintf(fptr, "%s,%lf,%lf,%lf\n", quiz[i].getQuizName(), quiz[i].getWeighted(), quiz[i].getCurrentMark(), quiz[i].getMaxMark());
+         }
+         fclose(fptr);
+         fptr = nullptr;
+      }
+      else {
+         cout << "ERROR: Can not write the data" << endl;
+      }
+   }
+
 }
