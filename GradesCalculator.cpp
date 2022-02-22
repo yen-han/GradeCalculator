@@ -3,63 +3,76 @@
 #include <cstdio>
 #include <cstring>
 #include "commonFunctions.h"
-#include "Quiz.h"
-
+#include "Grade.h"
 using namespace std;
 using namespace yh;
 
 void mainMenu();
-bool subjectMenu();
-void readRequirement();
-char searchSubject[10];
+bool subjectMenu(const char* searchSubject);
+//void viewGradesMenu();
+void readRequirement(const char* searchSubject, double totalScore);
+void modifySubject();
+//Grade readGrades(int& numGrades, double& totalQuizScore, const char* searchSubject);
 
 int main() {
-
    //main menu
    mainMenu();
-
    return 0;
 }
 
 void mainMenu() {
    char inputSubject[10];
+   char searchSubject[10];
+   
    cout << "Grades Calculator" << endl;
-   //cout << "subject : OOP244" << endl;
-   cout << "subject : ";
+   cout << "Subject : ";
    cin >> inputSubject;
+   // Ignore case sensitivity
    toUpper(searchSubject,inputSubject);
-   subjectMenu();
+   subjectMenu(searchSubject);
 }
 
-// subject menu 1. view 2. set 3. check requirement to pass
-bool subjectMenu() {
+// subject menu 1. view 2. set 3. weight setting 4.requirement to pass
+bool subjectMenu(const char* searchSubject) {
+   // Read data of search subject
+   int numGrades = 0;
+   double totalScore=0;
+   // Read Weight setting on the course
+   readWeightSetting(searchSubject);
+   // Read all Grades 
+   readGrades(numGrades, totalScore, searchSubject);
+
    int input;
    bool exit;
    do {
       exit = true;
-      cout << "=================" << endl;
+      cout << "=======================" << endl;
       cout << "1. View grades" << endl;
-      cout << "2. Modify new grades" << endl;
-      cout << "3. Requirement to Pass" << endl;
+      cout << "2. Modify grades" << endl;
+      cout << "3. Modify weight setting" << endl;
+      cout << "4. Requirement to Pass" << endl;
       cout << "0. Exit" << endl;
       cout << ">>> ";
       cin >> input;
-
+      cout << endl;
       switch (input) {
          // 1. View grades
       case 1:
-         readQuiz();
-         break;
+            displayData(numGrades);
+      break;
 
       // 2. Set grades
       case 2:
-         setQuiz();
+         //setQuiz();
          break;
 
-         //3. Requirement to Pass
       case 3:
-         cout << endl;
-         readRequirement();
+         modifyQuizWeightSetting(searchSubject);
+         break;
+
+         //4. Requirement to Pass
+      case 4:
+         readRequirement(searchSubject, totalScore);
          break;
 
          // 0. Exit
@@ -71,16 +84,18 @@ bool subjectMenu() {
    return exit;
 }
 
-void readRequirement() {
+
+
+void readRequirement(const char* searchSubject, double totalScore) {
    FILE* fptr = nullptr;
    fptr = fopen("requirement.csv", "r");
-   char subject[10];
+   char subject[10] = { '\0' };
    char requirement[100];
    bool found = false;
    if (fptr != nullptr) {
 
-      cout << "Requirements for " << searchSubject << endl;
-      cout << "-----------------------" << endl;
+      cout << "Requirements To Pass for " << searchSubject << endl;
+      cout << "----------------------------------" << endl;
       while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
          if (strstr(subject, searchSubject) != nullptr) {
             cout << requirement << endl;
@@ -95,33 +110,48 @@ void readRequirement() {
          //bool finished = false;
          char answer;
          char add;
-         cout << "Requirement not Found" << endl;
-         cout << "Do you want to add? (Y/N)" << endl << ">>>";
+         cout << "Requirements not Found" << endl;
+         cout << "Add requirements? (Y/N)" << endl << ">>>";
          cin >> answer;
          cin.ignore();
          if (answer == 'Y' || answer == 'y') {
             do {
                /*cout << "Subject name: ";
                cin.getline(subject, 10);*/
-               cout << "Requirement to Pass: ";
+               cout << "Requirements to Pass: ";
                cin.getline(requirement, 50);
                fptr = fopen("requirement.csv", "a");
                fprintf(fptr, "%s,%s\n", searchSubject, requirement);
-               cout << "Do you have more? (Y/N)" << endl << ">>>";
+               cout << "Continue to Add? (Y/N)" << endl << ">>>";
                cin.get(add);
                cin.ignore();
+               fclose(fptr);
+               fptr = nullptr;
             } while (add == 'Y' || add == 'y');
-            fclose(fptr);
-            fptr = nullptr;
          }
       }
+      // your status TO pass
+      cout << &totalScore << endl;
    }
    else {
-      cout << "FILE NOT FOUND" << endl;
+      cout << "ERROR:: FILE NOT FOUND" << endl;
    }
 }
 
 // viewSubject menu 1. total(how much left to pass) 2. Quizes 3. Assignments 4. Tests 5. check requirement to pass 0. Exit
+//void viewGradesMenu() {
+//
+//}
+
+void modifySubject() {
+   cout << "=======================" << endl;
+   cout << "1. View grades" << endl;
+   cout << "2. Modify grades" << endl;
+   cout << "3. Modify weight setting" << endl;
+   cout << "4. Requirement to Pass" << endl;
+   cout << "0. Exit" << endl;
+   cout << ">>> ";
+}
 
 // ModifySubject menu 1. quiz 2. assignment 3. test 0. Exit
 
@@ -137,4 +167,4 @@ void readRequirement() {
 
 // Delete compeltion-> after deletion, current score
 
-
+// Sort for the best 0 quiz

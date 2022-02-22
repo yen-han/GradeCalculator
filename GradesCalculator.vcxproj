@@ -141,11 +141,11 @@
   <ItemGroup>
     <ClCompile Include="commonFunctions.cpp" />
     <ClCompile Include="GradesCalculator.cpp" />
-    <ClCompile Include="Quiz.cpp" />
+    <ClCompile Include="Grade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonFunctions.h" />
-    <ClInclude Include="Quiz.h" />
+    <ClInclude Include="Grade.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

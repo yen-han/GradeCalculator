@@ -21,12 +21,12 @@
     <ClCompile Include="commonFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Quiz.cpp">
+    <ClCompile Include="Grade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Quiz.h">
+    <ClInclude Include="Grade.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commonFunctions.h">
