@@ -15,9 +15,6 @@ namespace yh {
       void deallocate();
 
    public:
-      // Read data From file
-      bool read(FILE* fptr);
-
       // Constructors
       Grade();
       Grade(const char* courseCode, int week, const char* title, char type, double score=0, double fullMark = 100);
@@ -46,6 +43,8 @@ namespace yh {
       double getScore() const;
       // GET FULL MARK (out of)
       double getFullMark() const;
+      // GET TYPE
+      char getType() const;
       // Get weighted score on each
       double getWeightedScore() const;
 
@@ -58,7 +57,8 @@ namespace yh {
    extern void readWeightSetting(const char* searchSubject);
    // Read ALL grads on the data file
    extern  void readGrades(int& numGrades, double& totalScore, const char* searchSubject);
-  // extern void setQuiz();
+   // Insert/Create New grades
+   extern void insertGrades(const char* searchSubject, int& numGrades);
    extern void displayData(const int numQuiz);
 
    extern void modifyQuizWeightSetting(const char* searchSubject);

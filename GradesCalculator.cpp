@@ -11,8 +11,7 @@ void mainMenu();
 bool subjectMenu(const char* searchSubject);
 //void viewGradesMenu();
 void readRequirement(const char* searchSubject, double totalScore);
-void modifySubject();
-//Grade readGrades(int& numGrades, double& totalQuizScore, const char* searchSubject);
+void modifyGrades(const char* searchSubject, int& numGrades);
 
 int main() {
    //main menu
@@ -45,7 +44,7 @@ bool subjectMenu(const char* searchSubject) {
    int input;
    bool exit;
    do {
-      exit = true;
+      exit = false;
       cout << "=======================" << endl;
       cout << "1. View grades" << endl;
       cout << "2. Modify grades" << endl;
@@ -63,7 +62,7 @@ bool subjectMenu(const char* searchSubject) {
 
       // 2. Set grades
       case 2:
-         //setQuiz();
+         modifyGrades(searchSubject, numGrades);
          break;
 
       case 3:
@@ -77,14 +76,12 @@ bool subjectMenu(const char* searchSubject) {
 
          // 0. Exit
       case 0:
-         exit = false;
+         exit = true;
          break;
       }
-   } while (exit);
+   } while (!exit);
    return exit;
 }
-
-
 
 void readRequirement(const char* searchSubject, double totalScore) {
    FILE* fptr = nullptr;
@@ -143,14 +140,30 @@ void readRequirement(const char* searchSubject, double totalScore) {
 //
 //}
 
-void modifySubject() {
-   cout << "=======================" << endl;
-   cout << "1. View grades" << endl;
-   cout << "2. Modify grades" << endl;
-   cout << "3. Modify weight setting" << endl;
-   cout << "4. Requirement to Pass" << endl;
-   cout << "0. Exit" << endl;
-   cout << ">>> ";
+void modifyGrades(const char* searchSubject, int& numGrades) {
+   int input;
+   bool exit;
+   do{ 
+      exit = false;
+      cout << "=======================" << endl;
+      cout << "1. Insert New grades" << endl;
+      cout << "2. Modify existing grades" << endl;
+      cout << "0. Exit" << endl;
+      cout << ">>> ";
+      cin >> input;
+
+      switch (input) {
+         // Insert/Create New Grades
+      case 1:
+         insertGrades(searchSubject, numGrades);
+         break;
+      case 2:
+         break;
+      case 0:
+         exit = true;
+         break;
+      }
+   } while (!exit);
 }
 
 // ModifySubject menu 1. quiz 2. assignment 3. test 0. Exit
