@@ -10,7 +10,7 @@ namespace yh {
       char m_type; // Q: quiz, T: test, A: assignment, N: none
 
       // Reset recognized invalid state
-      void resetInfo();
+      Grade& resetInfo();
       // Deallocate m_title
       void deallocate();
 
@@ -27,12 +27,11 @@ namespace yh {
 
       // Create & SET GRADE
       Grade& setInfo(const char* courseCode, int week, const char* title, char type, double score = 0, double fullMark = 100);
-      // Create & SET TITLE | used in constructor, setInfo
+      // Create & SET TITLE
       Grade& setTitle(const char* title);
-      // Create & SET SCORE | used in constructor, setInfo
+      // Create & SET SCORE 
       Grade& setScore(double score);
-
-      // Create & SET FULL MARK | used in constructor, setInfo
+      // Create & SET FULL MARK 
       Grade& setFullMark(double fullMark);
 
       // GET WEEK#
@@ -57,12 +56,13 @@ namespace yh {
    extern void readWeightSetting(const char* searchSubject);
    // Read ALL grads on the data file
    extern  void readGrades(int& numGrades, double& totalScore, const char* searchSubject);
+
+   extern std::ostream& displayData(const int numQuiz);
    // Insert/Create New grades
    extern void insertGrades(const char* searchSubject, int& numGrades);
-   extern void displayData(const int numQuiz);
 
-   extern void modifyQuizWeightSetting(const char* searchSubject);
-
+   extern void deleteGrades(const char* searchSubject, int& numGrades);
+   extern void modifyWeightSettingMenu(const char* searchSubject);
 }
 
 #endif // !YH_GRADE_H_

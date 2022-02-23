@@ -7,15 +7,19 @@
 using namespace std;
 using namespace yh;
 
+// ADD EVERY VALIDATION
+
 void mainMenu();
 bool subjectMenu(const char* searchSubject);
+void modifyGradesMenu(const char* searchSubject, int& numGrades);
 //void viewGradesMenu();
 void readRequirement(const char* searchSubject, double totalScore);
-void modifyGrades(const char* searchSubject, int& numGrades);
+//void record();
 
 int main() {
    //main menu
    mainMenu();
+   //record(); // To delete[] grades
    return 0;
 }
 
@@ -62,11 +66,12 @@ bool subjectMenu(const char* searchSubject) {
 
       // 2. Set grades
       case 2:
-         modifyGrades(searchSubject, numGrades);
+         // Go to modify Grades menu
+         modifyGradesMenu(searchSubject, numGrades);
          break;
 
       case 3:
-         modifyQuizWeightSetting(searchSubject);
+         modifyWeightSettingMenu(searchSubject);
          break;
 
          //4. Requirement to Pass
@@ -140,7 +145,7 @@ void readRequirement(const char* searchSubject, double totalScore) {
 //
 //}
 
-void modifyGrades(const char* searchSubject, int& numGrades) {
+void modifyGradesMenu(const char* searchSubject, int& numGrades) {
    int input;
    bool exit;
    do{ 
@@ -148,6 +153,7 @@ void modifyGrades(const char* searchSubject, int& numGrades) {
       cout << "=======================" << endl;
       cout << "1. Insert New grades" << endl;
       cout << "2. Modify existing grades" << endl;
+      cout << "3. Delete grades" << endl;
       cout << "0. Exit" << endl;
       cout << ">>> ";
       cin >> input;
@@ -157,7 +163,11 @@ void modifyGrades(const char* searchSubject, int& numGrades) {
       case 1:
          insertGrades(searchSubject, numGrades);
          break;
+         // Update existing Grades
       case 2:
+         break;
+         // Delete existing Grades
+      case 3:
          break;
       case 0:
          exit = true;
