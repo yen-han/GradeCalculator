@@ -10,10 +10,10 @@ using namespace yh;
 // ADD EVERY VALIDATION
 
 void mainMenu();
-bool subjectMenu(const char* searchSubject);
-void modifyGradesMenu(const char* searchSubject, int& numGrades);
+bool subjectMenu(const char* searchCourse);
+void modifyGradesMenu(const char* searchCourse, int& numGrades);
 //void viewGradesMenu();
-void readRequirement(const char* searchSubject, double totalScore);
+void readRequirement(const char* searchCourse, double totalScore);
 //void record();
 
 int main() {
@@ -24,28 +24,28 @@ int main() {
 }
 
 void mainMenu() {
-   char inputSubject[10];
-   char searchSubject[10];
+   char inputCourse[10];
+   char searchCourse[10];
    do {
       cout << "Grades Calculator" << endl;
-      cout << "Subject : ";
-      cin >> inputSubject;
+      cout << "Course Code : ";
+      cin >> inputCourse;
       // Ignore case sensitivity
-      toUpper(searchSubject, inputSubject);
-   } while (!subjectMenu(searchSubject));
+      toUpper(searchCourse, inputCourse);
+   } while (!subjectMenu(searchCourse));
 }
 
 // subject menu 1. view 2. set 3. weight setting 4.requirement to pass
-bool subjectMenu(const char* searchSubject) {
+bool subjectMenu(const char* searchCourse) {
    // Read data of search subject
    bool exit, valid=false;
    int numGrades = 0;
    double totalScore=0;
    // Read Weight setting on the course
-   readWeightSetting(searchSubject);
+   readWeightSetting(searchCourse);
    // Read all Grades 
-   numGrades = readGrades(totalScore, searchSubject);
-   if(numGrades>0){ 
+   numGrades = readGrades(totalScore, searchCourse);
+   if(numGrades > 0){ 
       valid = true;
       int input;
       do {
@@ -62,22 +62,22 @@ bool subjectMenu(const char* searchSubject) {
          switch (input) {
             // 1. View grades
          case 1:
-               displayData(searchSubject, numGrades);
+               displayGrades(searchCourse, numGrades);
          break;
 
          // 2. Set grades
          case 2:
             // Go to modify Grades menu
-            modifyGradesMenu(searchSubject, numGrades);
+            modifyGradesMenu(searchCourse, numGrades);
             break;
 
          case 3:
-            modifyWeightSettingMenu(searchSubject);
+            modifyWeightSettingMenu(searchCourse);
             break;
 
             //4. Requirement to Pass
          case 4:
-            readRequirement(searchSubject, totalScore);
+            readRequirement(searchCourse, totalScore);
             break;
 
             // 0. Exit
@@ -90,7 +90,7 @@ bool subjectMenu(const char* searchSubject) {
    return valid;
 }
 
-void readRequirement(const char* searchSubject, double totalScore) {
+void readRequirement(const char* searchCourse, double totalScore) {
    FILE* fptr = nullptr;
    fptr = fopen("requirement.csv", "r");
    char subject[10] = { '\0' };
@@ -98,10 +98,10 @@ void readRequirement(const char* searchSubject, double totalScore) {
    bool found = false;
    if (fptr != nullptr) {
 
-      cout << "Requirements To Pass for " << searchSubject << endl;
+      cout << "Requirements To Pass for " << searchCourse << endl;
       cout << "----------------------------------" << endl;
       while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
-         if (strstr(subject, searchSubject) != nullptr) {
+         if (strstr(subject, searchCourse) != nullptr) {
             cout << requirement << endl;
             found = true;
          }
@@ -125,7 +125,7 @@ void readRequirement(const char* searchSubject, double totalScore) {
                cout << "Requirements to Pass: ";
                cin.getline(requirement, 50);
                fptr = fopen("requirement.csv", "a");
-               fprintf(fptr, "%s,%s\n", searchSubject, requirement);
+               fprintf(fptr, "%s,%s\n", searchCourse, requirement);
                cout << "Continue to Add? (Y/N)" << endl << ">>>";
                cin.get(add);
                cin.ignore();
@@ -147,14 +147,14 @@ void readRequirement(const char* searchSubject, double totalScore) {
 //
 //}
 
-void modifyGradesMenu(const char* searchSubject, int& numGrades) {
+void modifyGradesMenu(const char* searchCourse, int& numGrades) {
    int input;
    bool exit;
    do{ 
       exit = false;
       cout << "=======================" << endl;
       cout << "1. Insert New grades" << endl;
-      cout << "2. Modify existing grades" << endl;
+      cout << "2. Update existing grades" << endl;
       cout << "3. Delete grades" << endl;
       cout << "0. Exit" << endl;
       cout << ">>> ";
@@ -163,10 +163,11 @@ void modifyGradesMenu(const char* searchSubject, int& numGrades) {
       switch (input) {
          // Insert/Create New Grades
       case 1:
-         insertGrades(searchSubject, numGrades);
+         insertGrades(searchCourse, numGrades);
          break;
          // Update existing Grades
       case 2:
+         updateGrades(searchCourse, numGrades);
          break;
          // Delete existing Grades
       case 3:

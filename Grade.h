@@ -53,16 +53,16 @@ namespace yh {
       bool isValid() const;
    };
    // Read All Weight Setting On the course
-   extern void readWeightSetting(const char* searchSubject);
+   extern void readWeightSetting(const char* searchCourse);
    // Read ALL grads on the data file
-   extern int readGrades(double& totalScore, const char* searchSubject);
-
-   extern std::ostream& displayData(const char* searchSubject, const int numGrades);
+   extern int readGrades(double& totalScore, const char* searchCourse);
+   // Display Grades in format
+   extern std::ostream& displayGrades(const char* searchCourse, const int numGrades);
    // Insert/Create New grades
-   extern void insertGrades(const char* searchSubject, int& numGrades);
-
-   extern void deleteGrades(const char* searchSubject, int& numGrades);
-   extern void modifyWeightSettingMenu(const char* searchSubject);
+   extern void insertGrades(const char* searchCourse, int& numGrades);
+   extern void updateGrades(const char* searchCourse, int& numGrades);
+   extern void deleteGrades(const char* searchCourse, int& numGrades);
+   extern void modifyWeightSettingMenu(const char* searchCourse);
 }
 
 #endif // !YH_GRADE_H_

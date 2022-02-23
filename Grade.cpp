@@ -152,10 +152,23 @@ namespace yh {
       cout << "Out of   | " << getFullMark() << endl;
       cout.setf(ios::fixed);
       cout.precision(3);
-      cout << "Weighted | " << eachWeight <<endl;
+      cout << "Weighted | ";
+      cout.setf(ios::fixed);
+      cout.precision(3);
+      if (getType() == 'Q') {
+         cout << quizEachWeight;
+      }
+      else if (getType() == 'A') {
+         cout << assignEachWeight;
+      }
+      else if (getType() == 'T') {
+         cout << testEachWeight;
+      }
+      cout.unsetf(ios::fixed);
+      cout << endl;
       cout << "---------------------" << endl;
       cout.precision(3);
-      cout << "Total    : " << getWeightedScore() <<  " % " << endl;
+      cout << "Total    | " << getWeightedScore() <<  " % " << endl;
       cout.unsetf(ios::fixed);
       cout << endl;
       return cout;
@@ -165,7 +178,7 @@ namespace yh {
       return (m_type == 'T' || m_type == 'Q'|| m_type == 'A') && m_score>0;
    }
    //------------------------------------------------------------
-   void readWeightSetting(const char* searchSubject) {
+   void readWeightSetting(const char* searchCourse) {
       char subject[10] = { '\0' };
       double tempOneQuizWeight = 0;
       double tempAllQuizWeight = 0;
@@ -178,7 +191,7 @@ namespace yh {
       fptr = fopen("assessmentWeight.csv", "r");
       if (fptr != nullptr) {
          while (fscanf(fptr, "%[^,],%lf,%lf,%lf,%lf,%lf,%lf\n", subject, &tempOneQuizWeight, &tempAllQuizWeight, &tempOneAssignWeight, &tempAllAssignWeight, &tempOneTestWeight, &tempAllTestWeight) == 7) {
-            if (strstr(subject, searchSubject) != nullptr) {
+            if (strstr(subject, searchCourse) != nullptr) {
                quizEachWeight = tempOneQuizWeight;
                quizAllWeight = tempAllQuizWeight;
                assignEachWeight = tempOneAssignWeight;
@@ -195,7 +208,7 @@ namespace yh {
       }
    }
 
-   int readGrades(double& totalScore, const char* searchSubject) {
+   int readGrades(double& totalScore, const char* searchCourse) {
       int numGrades = 0;
       bool found = false;
       FILE* fptr = nullptr;
@@ -211,7 +224,7 @@ namespace yh {
          grades = new Grade[static_cast<__int64>(sizeGrades)];
 
          while (fscanf(fptr, "%[^,],%[^,],%d,%c,%lf,%lf\n", subject, title, &week, &type, &score, &fullMark) == 6) {
-            if (strstr(subject, searchSubject) != nullptr){ 
+            if (strstr(subject, searchCourse) != nullptr){ 
                found = true;
                if (numGrades == sizeGrades) {
                   Grade* tempGrades = nullptr;
@@ -223,7 +236,7 @@ namespace yh {
                   grades = tempGrades;
                   sizeGrades += numGrades;
                }
-               grades[numGrades].setInfo(searchSubject, week, title, type, score, fullMark);
+               grades[numGrades].setInfo(searchCourse, week, title, type, score, fullMark);
                numGrades++;
             }
          }
@@ -237,7 +250,7 @@ namespace yh {
          }
          else {
             cout << endl;
-            cout << ">>>ERROR:Check subject name" << endl << endl;
+            cout << ">>> ERROR: Check Course Code" << endl << endl;
          }
       }
       else {
@@ -246,39 +259,33 @@ namespace yh {
       return numGrades;
    }
 
-   std::ostream& displayData(const char* searchSubject, const int numGrades) {
+   std::ostream& displayGrades(const char* searchCourse, const int numGrades) {
       double total = 0;
       double sumQuiz = 0;
       double sumAssign = 0;
       double sumTest = 0;
       if (numGrades > 0) {
-         cout << "<< " << searchSubject << " >>" << endl;
-         cout << "Week     | ";
+         cout << "<< " << searchCourse << " >>" << endl;
+         cout << "Week       | ";
          for (int i = 0; i < numGrades; i++) {
             cout << setw(7);
             cout << "#" << grades[i].getWeek();
          }
          cout << endl;
-         cout << "Title    | ";
+         cout << "Title      | ";
          for (int i = 0; i < numGrades; i++) {
             cout << setw(8);
             cout << grades[i].getTitle();
          }
          cout << endl;
 
-         cout << "Score    | ";
+         cout << "Score      | ";
          for (int i = 0; i < numGrades; i++) {
             cout << setw(6);
             cout << grades[i].getScore() << "/" << grades[i].getFullMark();
          }
          cout << endl;
-         //cout << "Max      | ";
-         //for (int i = 0; i < numGrades; i++) {
-         //   cout << setw(8);
-         //   cout << grades[i].getFullMark();
-         //}
-         //cout << endl;
-         cout << "Weighted | ";
+         cout << "Weighted   | ";
          for (int i = 0; i < numGrades; i++) {
             cout.setf(ios::fixed);
             cout.precision(3);
@@ -296,7 +303,7 @@ namespace yh {
          }
          cout << endl;
          cout << "---------------------" << endl;
-         cout << "Grade    | ";
+         cout << "Grade      | ";
          for (int i = 0; i < numGrades; i++) {
             cout.setf(ios::fixed);
             cout.precision(3);
@@ -318,12 +325,12 @@ namespace yh {
          }
          total = sumQuiz + sumAssign + sumTest;
          cout << endl;
-         cout << "QUIZ       : " << sumQuiz << " / " << quizAllWeight << " %" << endl;
-         cout << "ASSIGNMENT : " << sumAssign << " / " << assignAllWeight << " %" << endl;
-         cout << "TEST       : " << sumTest << " / " << testAllWeight << " %" << endl << endl;
          cout.setf(ios::fixed);
          cout.precision(2);
-         cout << "TOTAL      : " << total << " / " << (quizAllWeight + assignAllWeight + testAllWeight) << " %" << endl << endl;
+         cout << "QUIZ       |   " << sumQuiz << "  /  " << quizAllWeight << " %" << endl;
+         cout << "ASSIGNMENT |   " << sumAssign << "  /  " << assignAllWeight << " %" << endl;
+         cout << "TEST       |   " << sumTest << "  /  " << testAllWeight << " %" << endl << endl;
+         cout << "TOTAL      |   " << total << "  /  " << (quizAllWeight + assignAllWeight + testAllWeight) << " %" << endl << endl;
          cout.unsetf(ios::fixed);
       }
       else {
@@ -332,12 +339,12 @@ namespace yh {
       return cout;
    }
 
-   void modifyWeightSettingMenu(const char* searchSubject) {
+   void modifyWeightSettingMenu(const char* searchCourse) {
       int input;
       bool exit;
       do {
 
-         cout << searchSubject << "Weight Setting" << endl;
+         cout << searchCourse << "Weight Setting" << endl;
          cout << "=============================" << endl;
          cout.setf(ios::fixed);
          cout.precision(3);
@@ -378,15 +385,14 @@ namespace yh {
       } while (input != 0);
    }  
 
-
-
-   void insertGrades(const char* searchSubject, int& numGrades) {
+   void insertGrades(const char* searchCourse, int& numGrades) {
       int week;
       char type, answer;
       char title[20];
       double score, fullMark;
       double total = 0;
       do {
+         cout << searchCourse << endl;
          do {
             cout << "Week         : ";
             cin >> week;
@@ -413,14 +419,73 @@ namespace yh {
             }
          } while (fullMark < score);
          cout << endl;
-         grades[numGrades].setInfo(searchSubject, week, title, type, score, fullMark);
+         grades[numGrades].setInfo(searchCourse, week, title, type, score, fullMark);
          numGrades++;
          cout << "Have more? (Y|N)";
          cin >> answer;
       } while (answer=='Y' || answer=='y');
 
-      displayData(searchSubject, numGrades );
+      displayGrades(searchCourse, numGrades );
       cout << endl;
    }
 
+   void updateGrades(const char* searchCourse, int& numGrades) {
+      int inputWeek, i, foundIndex;
+      char inputType;
+      char answer;
+      Grade update;
+      do {
+         cout << endl;
+         cout << "Week : ";
+         cin >> inputWeek;
+         cout << "Type : ";
+         cin >> inputType;
+         cout << endl;
+         for (i = 0; i < numGrades; i++) {
+            if (grades[i].getWeek() == inputWeek && grades[i].getType() == inputType) {
+               grades[i].display();
+               foundIndex = i;
+            }
+         }
+         cout << "Update the grade? (Q to quit)" << endl << ">>>";
+         cin >> answer;
+      } while (!answer == 'Y' || !answer=='Q');
+      if (answer != 'Q') {
+         int week;
+         char type;
+         char title[20];
+         double score, fullMark;
+         cout << searchCourse << endl;
+         do {
+            cout << "Week         : ";
+            cin >> week;
+            if (week < 0 || week > 16) {
+               cout << ">>>ERROR: Week is between 1 and 14" << endl;
+            }
+         } while (week < 0 || week > 16);
+         cout << "Title        : ";
+         cin >> title;
+         do {
+            cout << "Type (Q|T|A) : ";
+            cin >> type;
+            if (!(type == 'Q' || type == 'T' || type == 'A')) {
+               cout << ">>>ERROR: type can be Q for quiz, T for Test, A for assignment" << endl;
+            }
+         } while (!(type == 'Q' || type == 'T' || type == 'A'));
+         cout << "Score        : ";
+         cin >> score;
+         do {
+            cout << "Out of       : ";
+            cin >> fullMark;
+            if (fullMark < score) {
+               cout << ">>>ERROR: full mark need to be bigger than score." << endl;
+            }
+         } while (fullMark < score);
+         cout << endl;
+         grades[foundIndex]=update.setInfo(searchCourse, week, title, type, score, fullMark);
+
+         displayGrades(searchCourse, numGrades);
+         cout << endl;
+      }
+   }
 }
