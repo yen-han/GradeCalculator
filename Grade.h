@@ -9,11 +9,6 @@ namespace yh {
       double m_fullMark;
       char m_type; // Q: quiz, T: test, A: assignment, N: none
 
-      // Reset recognized invalid state
-      Grade& resetInfo();
-      // Deallocate m_title
-      void deallocate();
-
    public:
       // Constructors
       Grade();
@@ -25,6 +20,10 @@ namespace yh {
       // Copy assignment
       Grade& operator=(const Grade& toCopyFrom);
 
+      // Reset recognized invalid state
+      Grade& resetInfo();
+      // Deallocate m_title
+      void deallocate();
       // Create & SET GRADE
       Grade& setInfo(const char* courseCode, int week, const char* title, char type, double score = 0, double fullMark = 100);
       // Create & SET TITLE
@@ -62,6 +61,7 @@ namespace yh {
    extern void insertGrades(const char* searchCourse, int& numGrades);
    extern void updateGrades(const char* searchCourse, int& numGrades);
    extern void deleteGrades(const char* searchCourse, int& numGrades);
+
    extern void modifyWeightSettingMenu(const char* searchCourse);
 }
 

@@ -171,6 +171,7 @@ void modifyGradesMenu(const char* searchCourse, int& numGrades) {
          break;
          // Delete existing Grades
       case 3:
+         deleteGrades(searchCourse, numGrades);
          break;
       case 0:
          exit = true;
