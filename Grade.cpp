@@ -8,10 +8,10 @@
 #include "commonFunctions.h"
 using namespace std;
 namespace yh {
-   // Sete assessement Weight
+   // Set assessement Weight
    double eachWeight;
    double allWeight;
-   double quizEachWeight=1;
+   double quizEachWeight = 1;
    double quizAllWeight;
    double assignEachWeight = 1;
    double assignAllWeight;
@@ -164,52 +164,11 @@ namespace yh {
    bool Grade::isValid() const {
       return (m_type == 'T' || m_type == 'Q'|| m_type == 'A') && m_score>0;
    }
-
-   void readGrades(int& numGrades, double& totalScore, const char* searchSubject) {
-      bool finished = false;
-      //int numGrades = 0;
-      FILE* fptr = nullptr;
-      fptr = fopen("grade.csv", "r");
-      if (fptr != nullptr) {
-         // Read comma deliminated file
-         char title[20];
-         char type;
-         int week;
-         double score = 0, fullMark = 0;
-         int sizeGrades = 5;
-         grades = new Grade[static_cast<__int64>(sizeGrades)];
-
-         while (fscanf(fptr, "%[^,],%d,%c,%lf,%lf\n", title, &week, &type, &score, &fullMark) == 5) {
-            if (numGrades == sizeGrades) {
-               Grade* tempGrades = nullptr;
-               tempGrades = new Grade[static_cast<__int64>(sizeGrades) + numGrades];
-               for (int i = 0; i < sizeGrades; i++) {
-                  tempGrades[i] = grades[i];
-               }
-               delete[] grades;
-               grades = tempGrades; // copy assignment needed
-               sizeGrades += numGrades;
-            }
-            grades[numGrades].setInfo(searchSubject, week, title, type, score, fullMark);
-            numGrades++;
-         }
-         // Close file
-         fclose(fptr);
-         fptr = nullptr;
-         for (int i = 0; i < numGrades; i++) {
-            totalScore += grades[i].getWeightedScore();
-         }
-      }
-      else {
-         cout << "ERROR: GRADE FILE INACCESIBLE";
-      }
-     // return grades;
-   }
-
+   //------------------------------------------------------------
    void readWeightSetting(const char* searchSubject) {
       char subject[10] = { '\0' };
-      double tempOneQuizWeight=0;
-      double tempAllQuizWeight=0;
+      double tempOneQuizWeight = 0;
+      double tempAllQuizWeight = 0;
       double tempOneAssignWeight = 0;
       double tempAllAssignWeight = 0;
       double tempOneTestWeight = 0;
@@ -232,62 +191,68 @@ namespace yh {
          fptr = nullptr;
       }
       else {
-         cout << "ERROR: WEIGHT SETTING FILE INACCESIBLE";
+         cout << ">>>ERROR: WEIGHT SETTING FILE INACCESIBLE";
       }
    }
 
-   void modifyWeightSettingMenu(const char* searchSubject) {
-      int input;
-      bool exit;
-      do {
+   int readGrades(double& totalScore, const char* searchSubject) {
+      int numGrades = 0;
+      bool found = false;
+      FILE* fptr = nullptr;
+      fptr = fopen("grade.csv", "r");
+      if (fptr != nullptr) {
+         // Read comma deliminated file
+         char title[20];
+         char subject[20] = { '\0' };
+         char type;
+         int week;
+         double score = 0, fullMark = 0;
+         int sizeGrades = 5;
+         grades = new Grade[static_cast<__int64>(sizeGrades)];
 
-         cout << searchSubject << "Weight Setting" << endl;
-         cout << "=============================" << endl;
-         cout.setf(ios::fixed);
-         cout.precision(3);
-         cout << "Each quiz weight : " << quizEachWeight << " %" << endl;
-         cout.unsetf(ios::fixed);
-         cout << "Total quiz weight: " << quizAllWeight << " %" << endl << endl;
-         cout.setf(ios::fixed);
-         cout.precision(3);
-         cout << "Each Assignment weight : " << assignEachWeight << " %" << endl;
-         cout.unsetf(ios::fixed);
-         cout << "Total Assignment weight: " << assignAllWeight << " %" << endl << endl;
-         cout.setf(ios::fixed);
-         cout.precision(3);
-         cout << "Each Test weight : " << testEachWeight << " %" << endl;
-         cout.unsetf(ios::fixed);
-         cout << "Total Test weight: " << testAllWeight << " %" << endl << endl;
-
-         exit = false;
-         cout << "=======================" << endl;
-         cout << "1. Modify quiz setting" << endl;
-         cout << "2. Modify Assignment setting" << endl;
-         cout << "3. Modify Test setting" << endl;
-         cout << "0. Exit" << endl;
-         cout << ">>> ";
-         cin >> input;
-         cout << endl;
-         switch (input) {
-         case 1:
-            break;
-         case 2:
-            break;
-         case 3:
-            break;
-         case 0:
-            exit = true;
-            break;
+         while (fscanf(fptr, "%[^,],%[^,],%d,%c,%lf,%lf\n", subject, title, &week, &type, &score, &fullMark) == 6) {
+            if (strstr(subject, searchSubject) != nullptr){ 
+               found = true;
+               if (numGrades == sizeGrades) {
+                  Grade* tempGrades = nullptr;
+                  tempGrades = new Grade[static_cast<__int64>(sizeGrades) + numGrades];
+                  for (int i = 0; i < sizeGrades; i++) {
+                     tempGrades[i] = grades[i]; // copy assignment needed
+                  }
+                  delete[] grades;
+                  grades = tempGrades;
+                  sizeGrades += numGrades;
+               }
+               grades[numGrades].setInfo(searchSubject, week, title, type, score, fullMark);
+               numGrades++;
+            }
          }
-      } while (input != 0);
-   }  
+         // Close file
+         fclose(fptr);
+         fptr = nullptr;
+         if (found) {
+            for (int i = 0; i < numGrades; i++) {
+               totalScore += grades[i].getWeightedScore();
+            }
+         }
+         else {
+            cout << endl;
+            cout << ">>>ERROR:Check subject name" << endl << endl;
+         }
+      }
+      else {
+         cout << "ERROR: GRADE FILE INACCESIBLE";
+      }
+      return numGrades;
+   }
 
-   std::ostream& displayData(const int numGrades) {
+   std::ostream& displayData(const char* searchSubject, const int numGrades) {
       double total = 0;
       double sumQuiz = 0;
       double sumAssign = 0;
       double sumTest = 0;
-      if(numGrades > 0){
+      if (numGrades > 0) {
+         cout << "<< " << searchSubject << " >>" << endl;
          cout << "Week     | ";
          for (int i = 0; i < numGrades; i++) {
             cout << setw(7);
@@ -304,7 +269,7 @@ namespace yh {
          cout << "Score    | ";
          for (int i = 0; i < numGrades; i++) {
             cout << setw(6);
-            cout << grades[i].getScore()<<"/"<< grades[i].getFullMark();
+            cout << grades[i].getScore() << "/" << grades[i].getFullMark();
          }
          cout << endl;
          //cout << "Max      | ";
@@ -353,12 +318,12 @@ namespace yh {
          }
          total = sumQuiz + sumAssign + sumTest;
          cout << endl;
-         cout << "QUIZ : " << sumQuiz << " / " << quizAllWeight << " %" << endl ;
+         cout << "QUIZ       : " << sumQuiz << " / " << quizAllWeight << " %" << endl;
          cout << "ASSIGNMENT : " << sumAssign << " / " << assignAllWeight << " %" << endl;
-         cout << "TEST : " << sumTest << " / " << testAllWeight << " %" << endl << endl;
+         cout << "TEST       : " << sumTest << " / " << testAllWeight << " %" << endl << endl;
          cout.setf(ios::fixed);
          cout.precision(2);
-         cout << "TOTAL: " << total << " / "<< (quizAllWeight+assignAllWeight+testAllWeight)<<" %" << endl << endl;
+         cout << "TOTAL      : " << total << " / " << (quizAllWeight + assignAllWeight + testAllWeight) << " %" << endl << endl;
          cout.unsetf(ios::fixed);
       }
       else {
@@ -366,6 +331,54 @@ namespace yh {
       }
       return cout;
    }
+
+   void modifyWeightSettingMenu(const char* searchSubject) {
+      int input;
+      bool exit;
+      do {
+
+         cout << searchSubject << "Weight Setting" << endl;
+         cout << "=============================" << endl;
+         cout.setf(ios::fixed);
+         cout.precision(3);
+         cout << "Each quiz weight : " << quizEachWeight << " %" << endl;
+         cout.unsetf(ios::fixed);
+         cout << "Total quiz weight: " << quizAllWeight << " %" << endl << endl;
+         cout.setf(ios::fixed);
+         cout.precision(3);
+         cout << "Each Assignment weight : " << assignEachWeight << " %" << endl;
+         cout.unsetf(ios::fixed);
+         cout << "Total Assignment weight: " << assignAllWeight << " %" << endl << endl;
+         cout.setf(ios::fixed);
+         cout.precision(3);
+         cout << "Each Test weight : " << testEachWeight << " %" << endl;
+         cout.unsetf(ios::fixed);
+         cout << "Total Test weight: " << testAllWeight << " %" << endl << endl;
+
+         exit = false;
+         cout << "=======================" << endl;
+         cout << "1. Modify quiz setting" << endl;
+         cout << "2. Modify Assignment setting" << endl;
+         cout << "3. Modify Test setting" << endl;
+         cout << "0. Exit" << endl;
+         cout << ">>> ";
+         cin >> input;
+         cout << endl;
+         switch (input) {
+         case 1:
+            break;
+         case 2:
+            break;
+         case 3:
+            break;
+         case 0:
+            exit = true;
+            break;
+         }
+      } while (input != 0);
+   }  
+
+
 
    void insertGrades(const char* searchSubject, int& numGrades) {
       int week;
@@ -406,7 +419,7 @@ namespace yh {
          cin >> answer;
       } while (answer=='Y' || answer=='y');
 
-      displayData(numGrades);
+      displayData(searchSubject, numGrades );
       cout << endl;
    }
 

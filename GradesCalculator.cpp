@@ -19,73 +19,75 @@ void readRequirement(const char* searchSubject, double totalScore);
 int main() {
    //main menu
    mainMenu();
-   //record(); // To delete[] grades
+   //record(); // To write in the file
    return 0;
 }
 
 void mainMenu() {
    char inputSubject[10];
    char searchSubject[10];
-   
-   cout << "Grades Calculator" << endl;
-   cout << "Subject : ";
-   cin >> inputSubject;
-   // Ignore case sensitivity
-   toUpper(searchSubject,inputSubject);
-   subjectMenu(searchSubject);
+   do {
+      cout << "Grades Calculator" << endl;
+      cout << "Subject : ";
+      cin >> inputSubject;
+      // Ignore case sensitivity
+      toUpper(searchSubject, inputSubject);
+   } while (!subjectMenu(searchSubject));
 }
 
 // subject menu 1. view 2. set 3. weight setting 4.requirement to pass
 bool subjectMenu(const char* searchSubject) {
    // Read data of search subject
+   bool exit, valid=false;
    int numGrades = 0;
    double totalScore=0;
    // Read Weight setting on the course
    readWeightSetting(searchSubject);
    // Read all Grades 
-   readGrades(numGrades, totalScore, searchSubject);
-
-   int input;
-   bool exit;
-   do {
-      exit = false;
-      cout << "=======================" << endl;
-      cout << "1. View grades" << endl;
-      cout << "2. Modify grades" << endl;
-      cout << "3. Modify weight setting" << endl;
-      cout << "4. Requirement to Pass" << endl;
-      cout << "0. Exit" << endl;
-      cout << ">>> ";
-      cin >> input;
-      cout << endl;
-      switch (input) {
-         // 1. View grades
-      case 1:
-            displayData(numGrades);
-      break;
-
-      // 2. Set grades
-      case 2:
-         // Go to modify Grades menu
-         modifyGradesMenu(searchSubject, numGrades);
+   numGrades = readGrades(totalScore, searchSubject);
+   if(numGrades>0){ 
+      valid = true;
+      int input;
+      do {
+         exit = false;
+         cout << "=======================" << endl;
+         cout << "1. View grades" << endl;
+         cout << "2. Modify grades" << endl;
+         cout << "3. Modify weight setting" << endl;
+         cout << "4. Requirement to Pass" << endl;
+         cout << "0. Exit" << endl;
+         cout << ">>> ";
+         cin >> input;
+         cout << endl;
+         switch (input) {
+            // 1. View grades
+         case 1:
+               displayData(searchSubject, numGrades);
          break;
 
-      case 3:
-         modifyWeightSettingMenu(searchSubject);
-         break;
+         // 2. Set grades
+         case 2:
+            // Go to modify Grades menu
+            modifyGradesMenu(searchSubject, numGrades);
+            break;
 
-         //4. Requirement to Pass
-      case 4:
-         readRequirement(searchSubject, totalScore);
-         break;
+         case 3:
+            modifyWeightSettingMenu(searchSubject);
+            break;
 
-         // 0. Exit
-      case 0:
-         exit = true;
-         break;
-      }
-   } while (!exit);
-   return exit;
+            //4. Requirement to Pass
+         case 4:
+            readRequirement(searchSubject, totalScore);
+            break;
+
+            // 0. Exit
+         case 0:
+            exit = true;
+            break;
+         }
+      } while (!exit);
+   } 
+   return valid;
 }
 
 void readRequirement(const char* searchSubject, double totalScore) {

@@ -55,9 +55,9 @@ namespace yh {
    // Read All Weight Setting On the course
    extern void readWeightSetting(const char* searchSubject);
    // Read ALL grads on the data file
-   extern  void readGrades(int& numGrades, double& totalScore, const char* searchSubject);
+   extern int readGrades(double& totalScore, const char* searchSubject);
 
-   extern std::ostream& displayData(const int numQuiz);
+   extern std::ostream& displayData(const char* searchSubject, const int numGrades);
    // Insert/Create New grades
    extern void insertGrades(const char* searchSubject, int& numGrades);
 
