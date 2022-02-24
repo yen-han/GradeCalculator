@@ -29,7 +29,8 @@ void mainMenu() {
    do {
       cout << "Grades Calculator" << endl;
       cout << "Course Code : ";
-      cin >> inputCourse;
+      cin.get(inputCourse, 10, '\n');
+      cin.ignore(100, '\n');
       // Ignore case sensitivity
       toUpper(searchCourse, inputCourse);
       // Loop until find VALID Course Code
