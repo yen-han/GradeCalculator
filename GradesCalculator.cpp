@@ -19,6 +19,7 @@ void readRequirement(const char* searchCourse, double totalScore);
 int main() {
    mainMenu();
    //record(); // To write in the file
+   clearMemory();
    return 0;
 }
 

@@ -74,6 +74,7 @@ namespace yh {
    void modifyQuizWeightSetting();
    void modifyAssignWeightSetting();
    void modifyTestWeightSetting();
+   extern void clearMemory();
 }
 
 #endif // !YH_GRADE_H_

@@ -221,8 +221,8 @@ namespace yh {
          char type;
          int week;
          double score = 0, fullMark = 0;
-         int sizeGrades = 5;
-         grades = new Grade[static_cast<__int64>(sizeGrades)];
+         unsigned int sizeGrades = 5;
+         grades = new Grade[sizeGrades];
 
          while (fscanf(fptr, "%[^,],%[^,],%d,%c,%lf,%lf\n", subject, title, &week, &type, &score, &fullMark) == 6) {
             if (strstr(subject, searchCourse) != nullptr){ 
@@ -537,6 +537,10 @@ namespace yh {
       }
    }
 
+   void clearMemory() {
+      delete[] grades;
+      grades = nullptr;
+   }
 }
 
 
