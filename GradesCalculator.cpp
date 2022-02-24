@@ -7,7 +7,12 @@
 using namespace std;
 using namespace yh;
 
+// TO DEVELOP
 // ADD EVERY VALIDATION
+// Store number of quiz, assignment, test?
+// Sort for the best 0 quiz
+// For multiple subject
+// Improve display with category(QTA)
 
 void mainMenu();
 bool subjectMenu(const char* searchCourse);
@@ -172,7 +177,7 @@ void readRequirement(const char* searchCourse, double totalScore) {
    bool found = false;
    if (fptr != nullptr) {
 
-      cout << "Requirements To Pass for " << searchCourse << endl;
+      cout << "*** Requirements To Pass for " << searchCourse << " ***"<< endl;
       cout << "----------------------------------" << endl;
       while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
          if (strstr(subject, searchCourse) != nullptr) {
@@ -189,6 +194,7 @@ void readRequirement(const char* searchCourse, double totalScore) {
          cout << "Requirements not Found" << endl;
          cout << "Add requirements? (Y/N)" << endl << ">>>";
          cin >> answer;
+         answer = toUpperCharacter(answer);
          cin.ignore();
          if (answer == 'Y' || answer == 'y') {
             do {
@@ -196,19 +202,20 @@ void readRequirement(const char* searchCourse, double totalScore) {
                cin.getline(requirement, 50);
                fptr = fopen("requirement.csv", "a");
                fprintf(fptr, "%s,%s\n", searchCourse, requirement);
-               cout << "Continue to Add? (Y/N)" << endl << ">>>";
+               cout << "Continue to Add (Y/N)?" << endl << " >>>";
                cin.get(add);
+               add = toUpperCharacter(add);
                cin.ignore();
                fclose(fptr);
                fptr = nullptr;
-            } while (add == 'Y' || add == 'y');
+            } while (add == 'Y');
          }
       }
       // minimum TO pass
       cout << "Minimum to Pass: " <<(50-totalScore)<< " % / 50 %" << endl<<endl;
    }
    else {
-      cout << "ERROR:: FILE NOT FOUND" << endl;
+      cout << "--- ERROR:: FILE NOT FOUND" << endl;
    }
 }
 
@@ -216,14 +223,3 @@ void readRequirement(const char* searchCourse, double totalScore) {
 //void viewGradesMenu() {
 //
 //}
-
-
-// ModifySubject menu 1. quiz 2. assignment 3. test 0. Exit
-
-// Insertmenu 1. courseCode... set function
-
-// Update menu 1. name 2. currentMark 3. unit 4. max
-
-
-
-// Sort for the best 0 quiz

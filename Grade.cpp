@@ -205,7 +205,7 @@ namespace yh {
          fptr = nullptr;
       }
       else {
-         cout << ">>>ERROR: WEIGHT SETTING FILE INACCESIBLE";
+         cout << "--- ERROR: WEIGHT SETTING FILE INACCESIBLE";
       }
    }
    
@@ -251,11 +251,11 @@ namespace yh {
          }
          else {
             cout << endl;
-            cout << ">>> ERROR: Check Course Code" << endl << endl;
+            cout << "--- ERROR: Check Course Code" << endl << endl;
          }
       }
       else {
-         cout << ">>> ERROR: GRADE FILE INACCESIBLE";
+         cout << "--- ERROR: GRADE FILE INACCESIBLE";
       }
       return numGrades;
    }
@@ -348,7 +348,7 @@ namespace yh {
          cout.unsetf(ios::fixed);
       }
       else {
-         cout << ">>> ERROR: No data found. Return to menu." << endl;
+         cout << "--- ERROR: No data found. Return to menu." << endl;
       }
       return cout;
    }
@@ -362,18 +362,20 @@ namespace yh {
       double total = 0;
 
       do {
-        cout << "<< INSERT " << searchCourse << " >>" << endl << endl;
+        cout << "*** INSERT " << searchCourse << " ***" << endl << endl;
         getGradeInput(week, title, type, score, fullMark);
          grades[numGrades].setInfo(searchCourse, week, title, type, score, fullMark);
          numGrades++;
-         cout << "Insert more? (Y/N) ?" << " >>>";
+         cout << "Insert more? (Y/N)?" << " >>>";
          cin >> answer;
-      } while (toUpperCharacter(answer) == 'Y');
+         answer = toUpperCharacter(answer);
+      } while (answer == 'Y');
 
       displayGrades(searchCourse, numGrades);
       cout << endl;
    }
 
+   // UPDATE grades
    void updateGrades(const char* searchCourse, int& numGrades) {
       int foundIndex = -1;
       char answer;
@@ -381,15 +383,15 @@ namespace yh {
       char type;
       char title[20];
       double score, fullMark;
+      cout << "*** UPDATE " << searchCourse << " ***" << endl << endl;
       do {
-         cout << "*** UPDATE " << searchCourse << " ***" << endl << endl;
          foundIndex = findMatchedIndex(numGrades);
-         cout << "Update the grade (Y/N) ?" << " >>>";
+         cout << "Update the grade (Y/N)?" << " >>>";
          cin >> answer;
-      } while (toUpperCharacter(answer) != 'Y' || toUpperCharacter(answer) != 'N');
-
-      if (toUpperCharacter(answer) != 'N') {
-         cout << "<< UPDATE " << searchCourse << " >>" << endl << endl;
+         answer = toUpperCharacter(answer);
+      } while (!(answer == 'Y' || answer == 'N'));
+      cout << endl;
+      if (answer != 'N') {
          getGradeInput(week, title, type, score, fullMark);
          grades[foundIndex].setInfo(searchCourse, week, title, type, score, fullMark);
 
@@ -398,16 +400,19 @@ namespace yh {
       }
    }
 
+   // DELETE grades
    void deleteGrades(const char* searchCourse, int& numGrades) {
       int foundIndex = -1;
       char answer;
       do {
-         cout << "<< DELETE " << searchCourse << " >>" << endl << endl;
+         cout << "*** DELETE " << searchCourse << " ***" << endl << endl;
          foundIndex = findMatchedIndex(numGrades);
-         cout << "Delete the grade? (Q to quit)" << endl << ">>>";
+         cout << "Delete the grade (Y/N)?" << endl << " >>>";
          cin >> answer;
-      } while (toUpperCharacter(answer) != 'Y' || toUpperCharacter(answer) != 'Q');
-      if (toUpperCharacter(answer) != 'Q') {
+         answer = toUpperCharacter(answer);
+      } while (!(answer == 'Y' || answer == 'N'));
+      cout << endl;
+      if (toUpperCharacter(answer) != 'N') {
          grades[foundIndex].resetInfo();
       }
       displayGrades(searchCourse, numGrades);
@@ -437,16 +442,18 @@ namespace yh {
          cout << "Week         : ";
          cin >> week;
          if (week < 0 || week > 16) {
-            cout << ">>>ERROR: Week is between 1 and 14" << endl;
+            cout << "--- ERROR: Week is between 1 and 14" << endl;
          }
       } while (week < 0 || week > 16);
       cout << "Title        : ";
-      cin >> title;
+      cin.get(title, 20, '\n');
+      cin.ignore(100, '\n');
       do {
          cout << "Type (Q|T|A) : ";
-         cin >> type;
+         cin.get(type);
+         type=toUpperCharacter(type);
          if (!(type == 'Q' || type == 'T' || type == 'A')) {
-            cout << ">>>ERROR: type can be Q for quiz, T for Test, A for assignment" << endl;
+            cout << "--- ERROR: Type must be Q for quiz, T for Test, A for assignment" << endl;
          }
       } while (!(type == 'Q' || type == 'T' || type == 'A'));
       cout << "Score        : ";
@@ -455,29 +462,29 @@ namespace yh {
          cout << "Out of       : ";
          cin >> fullMark;
          if (fullMark < score) {
-            cout << ">>>ERROR: full mark need to be bigger than score." << endl;
+            cout << "--- ERROR: full mark need to be bigger than score." << endl;
          }
       } while (fullMark < score);
       cout << endl;
    }
 
    void displayWeightSetting(const char* searchCourse) {
-      cout << "<< Weight Setting for " << searchCourse << " >>" << endl<<endl;
+      cout << "*** Weight Setting for " << searchCourse << " ***" << endl<<endl;
       cout.setf(ios::fixed);
       cout.precision(3);
-      cout << "Each quiz weight : " << quizEachWeight << " %" << endl;
+      cout << "Each QUIZ(Q)       | " << quizEachWeight << " %" << endl;
       cout.unsetf(ios::fixed);
-      cout << "Total quiz weight: " << quizAllWeight << " %" << endl << endl;
+      cout << "All  QUIZ(Q)       | " << quizAllWeight << " %" << endl << endl;
       cout.setf(ios::fixed);
       cout.precision(3);
-      cout << "Each Assignment weight : " << assignEachWeight << " %" << endl;
+      cout << "Each ASSIGNMENT(A) | " << assignEachWeight << " %" << endl;
       cout.unsetf(ios::fixed);
-      cout << "Total Assignment weight: " << assignAllWeight << " %" << endl << endl;
+      cout << "All  ASSIGNMENT(A) | " << assignAllWeight << " %" << endl << endl;
       cout.setf(ios::fixed);
       cout.precision(3);
-      cout << "Each Test weight : " << testEachWeight << " %" << endl;
+      cout << "Each TEST(T)       | " << testEachWeight << " %" << endl;
       cout.unsetf(ios::fixed);
-      cout << "Total Test weight: " << testAllWeight << " %" << endl << endl;
+      cout << "All  TEST(T)       | " << testAllWeight << " %" << endl << endl;
    }
 
    void modifyQuizWeightSetting() {
@@ -485,16 +492,17 @@ namespace yh {
       double inputAllQuiz;
       char answer;
       do { 
-      cout << "Each Quiz Weight : ";
+      cout << "Each Quiz  : ";
       cin >> inputEachQuiz;
-      cout << "Total Quiz Weight : ";
+      cout << "All Quiz   : ";
       cin >> inputAllQuiz;
       cout << endl;
 
-      cout << "Change? (Y/N) "<< " >>> ";
+      cout << "Change (Y/N)?"<< " >>> ";
          cin >> answer;
-      } while (toUpperCharacter(answer) != 'Y');
-      if (toUpperCharacter(answer) == 'Y') {
+         answer = toUpperCharacter(answer);
+      } while (answer != 'Y');
+      if (answer == 'Y') {
          quizEachWeight = inputEachQuiz;
          quizAllWeight = inputAllQuiz;
       }
@@ -504,16 +512,17 @@ namespace yh {
       double inputAllAssign;
       char answer;
       do {
-         cout << "Each Assignment Weight : ";
+         cout << "Each Assignment : ";
          cin >> inputEachAssign;
-         cout << "Total Assginment Weight : ";
+         cout << "All Assginment  : ";
          cin >> inputAllAssign;
          cout << endl;
 
-         cout << "Change? (Y/N) " << endl << ">>> ";
+         cout << "Change (Y/N)?" << " >>> ";
          cin >> answer;
-      } while (toUpperCharacter(answer) != 'Y');
-      if (toUpperCharacter(answer) == 'Y') {
+         answer = toUpperCharacter(answer);
+      } while (answer != 'Y');
+      if (answer == 'Y') {
          assignEachWeight = inputEachAssign;
          assignAllWeight = inputAllAssign;
       }
@@ -523,16 +532,17 @@ namespace yh {
       double inputAllTest;
       char answer;
       do {
-         cout << "Each Test Weight : ";
+         cout << "Each Test  : ";
          cin >> inputEachTest;
-         cout << "Total Test Weight : ";
+         cout << "All Test   : ";
          cin >> inputAllTest;
          cout << endl;
 
-         cout << "Change? (Y/N) " << endl << ">>> ";
+         cout << "Change (Y/N)?" << " >>> ";
          cin >> answer;
-      } while (toUpperCharacter(answer) != 'Y');
-      if (toUpperCharacter(answer) == 'Y') {
+         answer = toUpperCharacter(answer);
+      } while (answer != 'Y');
+      if (answer == 'Y') {
          testEachWeight = inputEachTest;
          testAllWeight = inputAllTest;
       }
