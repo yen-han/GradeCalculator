@@ -366,9 +366,9 @@ namespace yh {
         getGradeInput(week, title, type, score, fullMark);
          grades[numGrades].setInfo(searchCourse, week, title, type, score, fullMark);
          numGrades++;
-         cout << "Insert more? (Y|N)";
+         cout << "Insert more? (Y/N) ?" << " >>>";
          cin >> answer;
-      } while (answer == 'Y' || answer == 'y');
+      } while (toUpperCharacter(answer) == 'Y');
 
       displayGrades(searchCourse, numGrades);
       cout << endl;
@@ -382,12 +382,13 @@ namespace yh {
       char title[20];
       double score, fullMark;
       do {
-         cout << "<< UPDATE " << searchCourse << " >>" << endl << endl;
+         cout << "*** UPDATE " << searchCourse << " ***" << endl << endl;
          foundIndex = findMatchedIndex(numGrades);
-         cout << "Update the grade? (Q to quit)" << endl << ">>>";
+         cout << "Update the grade (Y/N) ?" << " >>>";
          cin >> answer;
-      } while (!answer == 'Y' || !answer == 'Q');
-      if (answer != 'Q') {
+      } while (toUpperCharacter(answer) != 'Y' || toUpperCharacter(answer) != 'N');
+
+      if (toUpperCharacter(answer) != 'N') {
          cout << "<< UPDATE " << searchCourse << " >>" << endl << endl;
          getGradeInput(week, title, type, score, fullMark);
          grades[foundIndex].setInfo(searchCourse, week, title, type, score, fullMark);
@@ -405,8 +406,8 @@ namespace yh {
          foundIndex = findMatchedIndex(numGrades);
          cout << "Delete the grade? (Q to quit)" << endl << ">>>";
          cin >> answer;
-      } while (!answer == 'Y' || !answer == 'Q');
-      if (answer != 'Q') {
+      } while (toUpperCharacter(answer) != 'Y' || toUpperCharacter(answer) != 'Q');
+      if (toUpperCharacter(answer) != 'Q') {
          grades[foundIndex].resetInfo();
       }
       displayGrades(searchCourse, numGrades);
@@ -490,10 +491,10 @@ namespace yh {
       cin >> inputAllQuiz;
       cout << endl;
 
-      cout << "Change? (Y/N) "<< endl << ">>> ";
+      cout << "Change? (Y/N) "<< " >>> ";
          cin >> answer;
-      } while (answer != 'Y');
-      if (answer == 'Y') {
+      } while (toUpperCharacter(answer) != 'Y');
+      if (toUpperCharacter(answer) == 'Y') {
          quizEachWeight = inputEachQuiz;
          quizAllWeight = inputAllQuiz;
       }
@@ -511,8 +512,8 @@ namespace yh {
 
          cout << "Change? (Y/N) " << endl << ">>> ";
          cin >> answer;
-      } while (answer != 'Y');
-      if (answer == 'Y') {
+      } while (toUpperCharacter(answer) != 'Y');
+      if (toUpperCharacter(answer) == 'Y') {
          assignEachWeight = inputEachAssign;
          assignAllWeight = inputAllAssign;
       }
@@ -530,8 +531,8 @@ namespace yh {
 
          cout << "Change? (Y/N) " << endl << ">>> ";
          cin >> answer;
-      } while (answer != 'Y');
-      if (answer == 'Y') {
+      } while (toUpperCharacter(answer) != 'Y');
+      if (toUpperCharacter(answer) == 'Y') {
          testEachWeight = inputEachTest;
          testAllWeight = inputAllTest;
       }

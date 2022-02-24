@@ -2,7 +2,12 @@
 #define YH_COMMONFUNCTIONS_H_
 
 namespace yh {
-   const char* toUpper(char* destination, char* source);
+   // Convert string of lowercase to STRING OF UPPERCASE
+   const char* toUpperString(char* destination, char* source);
+
+   // Convert character of lowercase to CHRACTER OF UPPERCASE
+   char toUpperCharacter(char character);
+
 }
 
 #endif // !YH_COMMONFUNCTIONS_H_

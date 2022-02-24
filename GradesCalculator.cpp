@@ -30,9 +30,10 @@ void mainMenu() {
       cout << "Grades Calculator" << endl;
       cout << "Course Code : ";
       cin.get(inputCourse, 10, '\n');
+      // Protect from longer course code
       cin.ignore(100, '\n');
       // Ignore case sensitivity
-      toUpper(searchCourse, inputCourse);
+      toUpperString(searchCourse, inputCourse);
       // Loop until find VALID Course Code
    } while (!subjectMenu(searchCourse));
 }
