@@ -12,12 +12,11 @@ using namespace yh;
 void mainMenu();
 bool subjectMenu(const char* searchCourse);
 void modifyGradesMenu(const char* searchCourse, int& numGrades);
-//void viewGradesMenu();
+void modifyWeightSettingMenu(const char* searchCourse);
 void readRequirement(const char* searchCourse, double totalScore);
 //void record();
 
 int main() {
-   //main menu
    mainMenu();
    //record(); // To write in the file
    return 0;
@@ -32,10 +31,11 @@ void mainMenu() {
       cin >> inputCourse;
       // Ignore case sensitivity
       toUpper(searchCourse, inputCourse);
+      // Loop until find VALID Course Code
    } while (!subjectMenu(searchCourse));
 }
 
-// subject menu 1. view 2. set 3. weight setting 4.requirement to pass
+// SUBJECT MENU 
 bool subjectMenu(const char* searchCourse) {
    // Read data of search subject
    bool exit, valid=false;
@@ -43,7 +43,7 @@ bool subjectMenu(const char* searchCourse) {
    double totalScore=0;
    // Read Weight setting on the course
    readWeightSetting(searchCourse);
-   // Read all Grades 
+   // Read all Grades , RETURN NUMBER OF GRADES, SCORE UP TO DATE
    numGrades = readGrades(totalScore, searchCourse);
    if(numGrades > 0){ 
       valid = true;
@@ -62,7 +62,7 @@ bool subjectMenu(const char* searchCourse) {
          switch (input) {
             // 1. View grades
          case 1:
-               displayGrades(searchCourse, numGrades);
+            displayGrades(searchCourse, numGrades);
          break;
 
          // 2. Set grades
@@ -71,7 +71,9 @@ bool subjectMenu(const char* searchCourse) {
             modifyGradesMenu(searchCourse, numGrades);
             break;
 
+         // 3. Set Weight setting
          case 3:
+            // Go to modify Weight Setting menu
             modifyWeightSettingMenu(searchCourse);
             break;
 
@@ -88,6 +90,75 @@ bool subjectMenu(const char* searchCourse) {
       } while (!exit);
    } 
    return valid;
+}
+
+// 2. MODIFY GRADES MENU
+void modifyGradesMenu(const char* searchCourse, int& numGrades) {
+   int input;
+   bool exit;
+   do {
+      exit = false;
+      cout << "=======================" << endl;
+      cout << "1. Insert New grades" << endl;
+      cout << "2. Update existing grades" << endl;
+      cout << "3. Delete grades" << endl;
+      cout << "0. Exit" << endl;
+      cout << ">>> ";
+      cin >> input;
+      cout << endl;
+      switch (input) {
+         // Insert or Create New Grades
+      case 1:
+         insertGrades(searchCourse, numGrades);
+         break;
+         // Update existing Grades
+      case 2:
+         updateGrades(searchCourse, numGrades);
+         break;
+         // Delete existing Grades
+      case 3:
+         deleteGrades(searchCourse, numGrades);
+         break;
+      case 0:
+         exit = true;
+         break;
+      }
+   } while (!exit);
+}
+
+// 3. MODIFY WEIGHT SETTING
+void modifyWeightSettingMenu(const char* searchCourse) {
+   int input;
+   bool exit;
+   do {
+      displayWeightSetting(searchCourse);
+      exit = false;
+      cout << "=======================" << endl;
+      cout << "1. Modify quiz setting" << endl;
+      cout << "2. Modify Assignment setting" << endl;
+      cout << "3. Modify Test setting" << endl;
+      cout << "0. Exit" << endl;
+      cout << ">>> ";
+      cin >> input;
+      cout << endl;
+      switch (input) {
+      case 1:
+         modifyQuizWeightSetting();
+         displayWeightSetting(searchCourse);
+         break;
+      case 2:
+         modifyAssignWeightSetting();
+         displayWeightSetting(searchCourse);
+         break;
+      case 3:
+         modifyTestWeightSetting();
+         displayWeightSetting(searchCourse);
+         break;
+      case 0:
+         exit = true;
+         break;
+      }
+   } while (!exit);
 }
 
 void readRequirement(const char* searchCourse, double totalScore) {
@@ -107,11 +178,9 @@ void readRequirement(const char* searchCourse, double totalScore) {
          }
       }
       cout << endl;
-      //rewind(fptr);
       fclose(fptr);
       fptr = nullptr;
       if (!found) {
-         //bool finished = false;
          char answer;
          char add;
          cout << "Requirements not Found" << endl;
@@ -120,8 +189,6 @@ void readRequirement(const char* searchCourse, double totalScore) {
          cin.ignore();
          if (answer == 'Y' || answer == 'y') {
             do {
-               /*cout << "Subject name: ";
-               cin.getline(subject, 10);*/
                cout << "Requirements to Pass: ";
                cin.getline(requirement, 50);
                fptr = fopen("requirement.csv", "a");
@@ -134,8 +201,8 @@ void readRequirement(const char* searchCourse, double totalScore) {
             } while (add == 'Y' || add == 'y');
          }
       }
-      // your status TO pass
-      cout << &totalScore << endl;
+      // minimum TO pass
+      cout << "Minimum to Pass: " <<(50-totalScore)<< " % / 50 %" << endl<<endl;
    }
    else {
       cout << "ERROR:: FILE NOT FOUND" << endl;
@@ -147,51 +214,13 @@ void readRequirement(const char* searchCourse, double totalScore) {
 //
 //}
 
-void modifyGradesMenu(const char* searchCourse, int& numGrades) {
-   int input;
-   bool exit;
-   do{ 
-      exit = false;
-      cout << "=======================" << endl;
-      cout << "1. Insert New grades" << endl;
-      cout << "2. Update existing grades" << endl;
-      cout << "3. Delete grades" << endl;
-      cout << "0. Exit" << endl;
-      cout << ">>> ";
-      cin >> input;
-
-      switch (input) {
-         // Insert/Create New Grades
-      case 1:
-         insertGrades(searchCourse, numGrades);
-         break;
-         // Update existing Grades
-      case 2:
-         updateGrades(searchCourse, numGrades);
-         break;
-         // Delete existing Grades
-      case 3:
-         deleteGrades(searchCourse, numGrades);
-         break;
-      case 0:
-         exit = true;
-         break;
-      }
-   } while (!exit);
-}
 
 // ModifySubject menu 1. quiz 2. assignment 3. test 0. Exit
-
-// ModifyEachCategory 1. Insert 2. Update 3. Delete 0. Exit
 
 // Insertmenu 1. courseCode... set function
 
 // Update menu 1. name 2. currentMark 3. unit 4. max
 
-// Delete menu 1. name 
-// show the info deleted
-// Do you really want to delete? Y. resetInfo N. go back
 
-// Delete compeltion-> after deletion, current score
 
 // Sort for the best 0 quiz

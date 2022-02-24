@@ -59,10 +59,21 @@ namespace yh {
    extern std::ostream& displayGrades(const char* searchCourse, const int numGrades);
    // Insert/Create New grades
    extern void insertGrades(const char* searchCourse, int& numGrades);
+   // Update existing grades
    extern void updateGrades(const char* searchCourse, int& numGrades);
+   // Delete existing grades
    extern void deleteGrades(const char* searchCourse, int& numGrades);
+   
+   // Get Grade input 
+   void getGradeInput(int& week, char* title, char& type, double& score, double& fullMark);
+   // Find matched grades by week, type info
+   int findMatchedIndex(const int numGrades);
 
-   extern void modifyWeightSettingMenu(const char* searchCourse);
+   //extern void modifyWeightSettingMenu(const char* searchCourse);
+   void displayWeightSetting(const char* searchCourse);
+   void modifyQuizWeightSetting();
+   void modifyAssignWeightSetting();
+   void modifyTestWeightSetting();
 }
 
 #endif // !YH_GRADE_H_
