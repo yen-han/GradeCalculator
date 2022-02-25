@@ -16,6 +16,7 @@ using namespace yh;
 
 void mainMenu();
 bool subjectMenu(const char* searchCourse);
+void displayGradesMenu(const char* searchCourse, int& numGrades);
 void modifyGradesMenu(const char* searchCourse, int& numGrades);
 void modifyWeightSettingMenu(const char* searchCourse);
 void readRequirement(const char* searchCourse, double totalScore);
@@ -70,6 +71,7 @@ bool subjectMenu(const char* searchCourse) {
          switch (input) {
             // 1. View grades
          case 1:
+            displayGradesMenu(searchCourse, numGrades);
             displayGrades(searchCourse, numGrades);
          break;
 
@@ -98,6 +100,44 @@ bool subjectMenu(const char* searchCourse) {
       } while (!exit);
    } 
    return valid;
+}
+
+// 1. VIEW GRADES MENU
+void displayGradesMenu(const char* searchCourse, int& numGrades) {
+   int input;
+   cout << "=======================" << endl;
+   cout << "1. Total Grades" << endl;
+   cout << "2. Quiz Grades" << endl;
+   cout << "3. Assignment Grades" << endl;
+   cout << "4. Test Grades" << endl;
+   cout << "5. Check requirement" << endl;
+   cout << "0. Exit" << endl;
+   cout << ">>> ";
+   cin >> input;
+   cout << endl;
+   switch (input) {
+      // 1. Total Grades
+   case 1:
+      break;
+      // 2. Quiz Grades
+   case 2:
+      displayQuiz(searchCourse, numGrades);
+      break;
+      // 3. Assignment Grades
+   case 3:
+      displayAssignment(searchCourse, numGrades);
+      break;
+      // 4. Test Grades
+   case 4:
+      displayTest(searchCourse, numGrades);
+      break;
+      // 5. Check requirement
+   case 5:
+      break;
+      // 0. Exit
+   case 0:
+      break;
+   }
 }
 
 // 2. MODIFY GRADES MENU
@@ -218,8 +258,3 @@ void readRequirement(const char* searchCourse, double totalScore) {
       cout << "--- ERROR:: FILE NOT FOUND" << endl;
    }
 }
-
-// viewSubject menu 1. total(how much left to pass) 2. Quizes 3. Assignments 4. Tests 5. check requirement to pass 0. Exit
-//void viewGradesMenu() {
-//
-//}

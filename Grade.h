@@ -2,7 +2,7 @@
 #define YH_GRADE_H_
 namespace yh {
    class Grade {
-      char m_courseCode[8];
+      char m_courseCode[10];
       int m_week; // To sort
       char* m_title;
       double m_score;
@@ -57,6 +57,12 @@ namespace yh {
    extern int readGrades(double& totalScore, const char* searchCourse);
    // Display Grades in format
    extern std::ostream& displayGrades(const char* searchCourse, const int numGrades);
+
+   extern std::ostream& displayQuiz(const char* searchCourse, const int numGrades);
+
+   extern std::ostream& displayAssignment(const char* searchCourse, const int numGrades);
+   extern std::ostream& displayTest(const char* searchCourse, const int numGrades);
+
    // Insert/Create New grades
    extern void insertGrades(const char* searchCourse, int& numGrades);
    // Update existing grades
@@ -69,11 +75,16 @@ namespace yh {
    // Find matched grades by week, type info
    int findMatchedIndex(const int numGrades);
 
-   //extern void modifyWeightSettingMenu(const char* searchCourse);
+   // Display Weight setting
    void displayWeightSetting(const char* searchCourse);
+   // Update QUIZ Weight setting
    void modifyQuizWeightSetting();
+   // Update ASSIGNMENT Weight setting
    void modifyAssignWeightSetting();
+   // Update TEST Weight setting
    void modifyTestWeightSetting();
+
+   // Delete Dynamic allocated memory
    extern void clearMemory();
 }
 

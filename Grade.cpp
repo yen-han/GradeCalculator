@@ -260,6 +260,219 @@ namespace yh {
       return numGrades;
    }
 
+   std::ostream& displayQuiz(const char* searchCourse, const int numGrades) {
+      double sumQuiz = 0;
+      if (numGrades > 0) {
+         cout << "*** " << searchCourse << " ***" << endl << endl;
+         cout << "Week       | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType()=='Q') {
+               cout << setw(7);
+               cout << "#" << grades[i].getWeek();
+            }
+         }
+         cout << endl;
+         cout << "Title      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'Q') {
+               cout << setw(8);
+               cout << grades[i].getTitle();
+            }
+         }
+         cout << endl;
+
+         cout << "Score      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'Q') {
+               cout << setw(6);
+               cout << grades[i].getScore() << "/" << grades[i].getFullMark();
+            }
+         }
+         cout << endl;
+         cout << "Weighted   | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'Q') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << quizEachWeight;
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         cout << "---------------------" << endl;
+         cout << "Grade      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'Q') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << grades[i].getWeightedScore();
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid()) {
+               if (grades[i].getType() == 'Q') {
+                  sumQuiz += grades[i].getWeightedScore();
+               }
+            }
+         }
+
+         cout << endl;
+         cout.setf(ios::fixed);
+         cout.precision(2);
+         cout << "QUIZ       |   " << sumQuiz << "  /  " << quizAllWeight << " %" << endl;
+         cout.unsetf(ios::fixed);
+      }
+      else {
+         cout << "--- ERROR: No data found. Return to menu." << endl;
+      }
+      return cout;
+   }
+   std::ostream& displayAssignment(const char* searchCourse, const int numGrades) {
+      double sumAssign = 0;
+      if (numGrades > 0) {
+         cout << "*** " << searchCourse << " ***" << endl << endl;
+         cout << "Week       | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'A') {
+               cout << setw(7);
+               cout << "#" << grades[i].getWeek();
+            }
+         }
+         cout << endl;
+         cout << "Title      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'A') {
+               cout << setw(8);
+               cout << grades[i].getTitle();
+            }
+         }
+         cout << endl;
+
+         cout << "Score      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'A') {
+               cout << setw(6);
+               cout << grades[i].getScore() << "/" << grades[i].getFullMark();
+            }
+         }
+         cout << endl;
+         cout << "Weighted   | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'A') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << assignEachWeight;
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         cout << "---------------------" << endl;
+         cout << "Grade      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'A') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << grades[i].getWeightedScore();
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid()) {
+               if (grades[i].getType() == 'A') {
+                  sumAssign += grades[i].getWeightedScore();
+               }
+            }
+         }
+
+         cout << endl;
+         cout.setf(ios::fixed);
+         cout.precision(2);
+         cout << "ASSIGNMENT |   " << sumAssign << "  /  " << assignAllWeight << " %" << endl;
+         cout.unsetf(ios::fixed);
+      }
+      else {
+         cout << "--- ERROR: No data found. Return to menu." << endl;
+      }
+      return cout;
+   }
+   std::ostream& displayTest(const char* searchCourse, const int numGrades) {
+      double sumTest = 0;
+      if (numGrades > 0) {
+         cout << "*** " << searchCourse << " ***" << endl << endl;
+         cout << "Week       | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'T') {
+               cout << setw(7);
+               cout << "#" << grades[i].getWeek();
+            }
+         }
+         cout << endl;
+         cout << "Title      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'T') {
+               cout << setw(8);
+               cout << grades[i].getTitle();
+            }
+         }
+         cout << endl;
+
+         cout << "Score      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'T') {
+               cout << setw(6);
+               cout << grades[i].getScore() << "/" << grades[i].getFullMark();
+            }
+         }
+         cout << endl;
+         cout << "Weighted   | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'T') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << testEachWeight;
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         cout << "---------------------" << endl;
+         cout << "Grade      | ";
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid() && grades[i].getType() == 'T') {
+               cout.setf(ios::fixed);
+               cout.precision(3);
+               cout << setw(8);
+               cout << grades[i].getWeightedScore();
+               cout.unsetf(ios::fixed);
+            }
+         }
+         cout << endl;
+         for (int i = 0; i < numGrades; i++) {
+            if (grades[i].isValid()) {
+               if (grades[i].getType() == 'T') {
+                  sumTest += grades[i].getWeightedScore();
+               }
+            }
+         }
+
+         cout << endl;
+         cout.setf(ios::fixed);
+         cout.precision(2);
+         cout << "TEST       |   " << sumTest << "  /  " << testAllWeight << " %" << endl << endl;
+         cout.unsetf(ios::fixed);
+      }
+      else {
+         cout << "--- ERROR: No data found. Return to menu." << endl;
+      }
+      return cout;
+   }
    // Display grades with format
    std::ostream& displayGrades(const char* searchCourse, const int numGrades) {
       double total = 0;
@@ -267,7 +480,7 @@ namespace yh {
       double sumAssign = 0;
       double sumTest = 0;
       if (numGrades > 0) {
-         cout << "<< " << searchCourse << " >>" << endl << endl;
+         cout << "*** " << searchCourse << " ***" << endl << endl;
          cout << "Week       | ";
          for (int i = 0; i < numGrades; i++) {
             if (grades[i].isValid()) {
