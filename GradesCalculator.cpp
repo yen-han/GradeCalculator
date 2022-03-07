@@ -13,6 +13,7 @@ using namespace yh;
 // Sort for the best 0 quiz
 // For multiple subject
 // Improve display with category(QTA)
+// More functions
 
 void mainMenu();
 bool subjectMenu(const char* searchCourse);
@@ -49,6 +50,7 @@ bool subjectMenu(const char* searchCourse) {
    // Read data of search subject
    bool exit, valid=false;
    int numGrades = 0;
+   int input;
    double totalScore=0;
    // Read Weight setting on the course
    readWeightSetting(searchCourse);
@@ -56,10 +58,9 @@ bool subjectMenu(const char* searchCourse) {
    numGrades = readGrades(totalScore, searchCourse);
    if(numGrades > 0){ 
       valid = true;
-      int input;
       do {
          exit = false;
-         cout << "=======================" << endl;
+         seperatorDouble();
          cout << "1. View grades" << endl;
          cout << "2. Modify grades" << endl;
          cout << "3. Modify weight setting" << endl;
@@ -105,7 +106,7 @@ bool subjectMenu(const char* searchCourse) {
 // 1. VIEW GRADES MENU
 void displayGradesMenu(const char* searchCourse, int& numGrades) {
    int input;
-   cout << "=======================" << endl;
+   seperatorDouble();
    cout << "1. Total Grades" << endl;
    cout << "2. Quiz Grades" << endl;
    cout << "3. Assignment Grades" << endl;
@@ -118,6 +119,7 @@ void displayGradesMenu(const char* searchCourse, int& numGrades) {
    switch (input) {
       // 1. Total Grades
    case 1:
+      // *** TO DEVELOP
       break;
       // 2. Quiz Grades
    case 2:
@@ -146,7 +148,7 @@ void modifyGradesMenu(const char* searchCourse, int& numGrades) {
    bool exit;
    do {
       exit = false;
-      cout << "=======================" << endl;
+      seperatorDouble();
       cout << "1. Insert New grades" << endl;
       cout << "2. Update existing grades" << endl;
       cout << "3. Delete grades" << endl;
@@ -181,7 +183,7 @@ void modifyWeightSettingMenu(const char* searchCourse) {
    do {
       displayWeightSetting(searchCourse);
       exit = false;
-      cout << "=======================" << endl;
+      seperatorDouble();
       cout << "1. Modify quiz setting" << endl;
       cout << "2. Modify Assignment setting" << endl;
       cout << "3. Modify Test setting" << endl;

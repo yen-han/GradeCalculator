@@ -7,7 +7,7 @@ namespace yh {
 
    // Convert character of lowercase to CHRACTER OF UPPERCASE
    char toUpperCharacter(char character);
-
+   void seperatorDouble();
 }
 
 #endif // !YH_COMMONFUNCTIONS_H_

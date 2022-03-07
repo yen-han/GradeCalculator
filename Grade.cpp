@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstring>
 #include <iomanip>
+#include <fstream>
 #include "Grade.h"
 #include "commonFunctions.h"
 using namespace std;
@@ -187,12 +188,22 @@ namespace yh {
       double tempAllAssignWeight = 0;
       double tempOneTestWeight = 0;
       double tempAllTestWeight = 0;
-
+      //ifstream file;     
+      //file.open("assessmentWeight.csv");
       FILE* fptr = nullptr;
       fptr = fopen("assessmentWeight.csv", "r");
-      if (fptr != nullptr) {
+      if(fptr!=nullptr) {
+      //if (file.is_open()) {
+         //while(file){ 
          while (fscanf(fptr, "%[^,],%lf,%lf,%lf,%lf,%lf,%lf\n", subject, &tempOneQuizWeight, &tempAllQuizWeight, &tempOneAssignWeight, &tempAllAssignWeight, &tempOneTestWeight, &tempAllTestWeight) == 7) {
             if (strstr(subject, searchCourse) != nullptr) {
+               //file >> subject;
+               //file >> quizEachWeight;
+               //file >> quizAllWeight;
+               //file >> assignEachWeight;
+               //file >> assignAllWeight;
+               //file >> testEachWeight;
+               //file >> testAllWeight;
                quizEachWeight = tempOneQuizWeight;
                quizAllWeight = tempAllQuizWeight;
                assignEachWeight = tempOneAssignWeight;
@@ -202,6 +213,7 @@ namespace yh {
             }
          }
          fclose(fptr);
+         //file.close();
          fptr = nullptr;
       }
       else {
