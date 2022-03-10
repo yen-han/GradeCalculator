@@ -21,5 +21,6 @@ namespace yh {
       cout.width(39);
       cout.fill('=');
       cout << "=" << endl;
+      cout.fill(' ');
    }
 }

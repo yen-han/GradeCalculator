@@ -10,7 +10,7 @@ using namespace yh;
 // TO DEVELOP
 // ADD EVERY VALIDATION
 // Store number of quiz, assignment, test?
-// Sort for the best 0 quiz
+// Sort for the best # quiz
 // For multiple subject
 // Improve display with category(QTA)
 // More functions
