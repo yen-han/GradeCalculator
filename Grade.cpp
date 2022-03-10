@@ -57,14 +57,16 @@ namespace yh {
       deallocate();
    }
    Grade::Grade(const Grade& toCopyFrom) {
-      strcpy(m_courseCode, toCopyFrom.m_courseCode);
-      m_week = toCopyFrom.m_week;
-      deallocate();
-      setTitle(toCopyFrom.m_title);
-      setScore(toCopyFrom.m_score);
-      setFullMark(toCopyFrom.m_fullMark);
-      m_type = toCopyFrom.m_type;
-    
+      resetInfo();
+      if (toCopyFrom.isValid()) {
+         strcpy(m_courseCode, toCopyFrom.m_courseCode);
+         m_week = toCopyFrom.m_week;
+         deallocate();
+         setTitle(toCopyFrom.m_title);
+         setScore(toCopyFrom.m_score);
+         setFullMark(toCopyFrom.m_fullMark);
+         m_type = toCopyFrom.m_type;
+      }
    }
    Grade& Grade::operator=(const Grade& toCopyFrom) {
       if (this != &toCopyFrom) {
@@ -770,6 +772,25 @@ namespace yh {
       if (answer == 'Y') {
          testEachWeight = inputEachTest;
          testAllWeight = inputAllTest;
+      }
+   }
+
+   void selectionSort(int numGrades) {
+      int i, j, min;
+      Grade temp;
+      for (i = 0; i < numGrades; i++)
+      {
+         min = i;
+         for (j = i + 1; j < numGrades; j++) {
+            if (grades[j].getWeek() < grades[min].getWeek()) {
+               min = j;
+            }
+         }
+         if (min != i) {
+            temp = grades[i];
+            grades[i] = grades[min];
+            grades[min] = temp;
+         }
       }
    }
 

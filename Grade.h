@@ -83,6 +83,7 @@ namespace yh {
    void modifyAssignWeightSetting();
    // Update TEST Weight setting
    void modifyTestWeightSetting();
+   void selectionSort(int numGrades);
 
    // Delete Dynamic allocated memory
    extern void clearMemory();
