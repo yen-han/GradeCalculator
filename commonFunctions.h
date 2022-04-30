@@ -8,6 +8,9 @@ namespace yh {
    // Convert character of lowercase to CHRACTER OF UPPERCASE
    char toUpperCharacter(char character);
    void seperatorDouble();
+   void allocateCopy(char*& desc, const char* src);
+   int getint(int min, int max);
+   char* getDynCstr(std::istream& istr, char delim);
 }
 
 #endif // !YH_COMMONFUNCTIONS_H_

@@ -4,6 +4,7 @@
 #include <cstring>
 #include "commonFunctions.h"
 #include "Grade.h"
+#include "Management.h"
 using namespace std;
 using namespace yh;
 
@@ -15,35 +16,16 @@ using namespace yh;
 // Improve display with category(QTA)
 // More functions
 
-void mainMenu();
 bool subjectMenu(const char* searchCourse);
 void displayGradesMenu(const char* searchCourse, int& numGrades);
-void modifyGradesMenu(const char* searchCourse, int& numGrades);
 void modifyWeightSettingMenu(const char* searchCourse);
 void readRequirement(const char* searchCourse, double totalScore);
-//void record();
 
 int main() {
-   mainMenu();
-   //record(); // To write in the file
-   clearMemory();
+   Management().run();
    return 0;
 }
 
-void mainMenu() {
-   char inputCourse[10];
-   char searchCourse[10];
-   do {
-      cout << "Grades Calculator" << endl;
-      cout << "Course Code : ";
-      cin.get(inputCourse, 10, '\n');
-      // Protect from longer course code
-      cin.ignore(100, '\n');
-      // Ignore case sensitivity
-      toUpperString(searchCourse, inputCourse);
-      // Loop until find VALID Course Code
-   } while (!subjectMenu(searchCourse));
-}
 
 // SUBJECT MENU 
 bool subjectMenu(const char* searchCourse) {
@@ -53,9 +35,9 @@ bool subjectMenu(const char* searchCourse) {
    int input;
    double totalScore=0;
    // Read Weight setting on the course
-   readWeightSetting(searchCourse);
+   //readWeightSetting(searchCourse);
    // Read all Grades , RETURN NUMBER OF GRADES, SCORE UP TO DATE
-   numGrades = readGrades(totalScore, searchCourse);
+   //numGrades = readGrades(totalScore, searchCourse);
    if(numGrades > 0){ 
       valid = true;
       do {
@@ -73,13 +55,13 @@ bool subjectMenu(const char* searchCourse) {
             // 1. View grades
          case 1:
             displayGradesMenu(searchCourse, numGrades);
-            displayGrades(searchCourse, numGrades);
+          //  displayGrades(searchCourse, numGrades);
          break;
 
          // 2. Set grades
          case 2:
             // Go to modify Grades menu
-            modifyGradesMenu(searchCourse, numGrades);
+            //modifyGradesMenu(searchCourse, numGrades);
             break;
 
          // 3. Set Weight setting
@@ -123,15 +105,15 @@ void displayGradesMenu(const char* searchCourse, int& numGrades) {
       break;
       // 2. Quiz Grades
    case 2:
-      displayQuiz(searchCourse, numGrades);
+  //    displayQuiz(searchCourse, numGrades);
       break;
       // 3. Assignment Grades
    case 3:
-      displayAssignment(searchCourse, numGrades);
+    //  displayAssignment(searchCourse, numGrades);
       break;
       // 4. Test Grades
    case 4:
-      displayTest(searchCourse, numGrades);
+   //   displayTest(searchCourse, numGrades);
       break;
       // 5. Check requirement
    case 5:
@@ -142,46 +124,12 @@ void displayGradesMenu(const char* searchCourse, int& numGrades) {
    }
 }
 
-// 2. MODIFY GRADES MENU
-void modifyGradesMenu(const char* searchCourse, int& numGrades) {
-   int input;
-   bool exit;
-   do {
-      exit = false;
-      seperatorDouble();
-      cout << "1. Insert New grades" << endl;
-      cout << "2. Update existing grades" << endl;
-      cout << "3. Delete grades" << endl;
-      cout << "0. Exit" << endl;
-      cout << ">>> ";
-      cin >> input;
-      cout << endl;
-      switch (input) {
-         // Insert or Create New Grades
-      case 1:
-         insertGrades(searchCourse, numGrades);
-         break;
-         // Update existing Grades
-      case 2:
-         updateGrades(searchCourse, numGrades);
-         break;
-         // Delete existing Grades
-      case 3:
-         deleteGrades(searchCourse, numGrades);
-         break;
-      case 0:
-         exit = true;
-         break;
-      }
-   } while (!exit);
-}
-
 // 3. MODIFY WEIGHT SETTING
 void modifyWeightSettingMenu(const char* searchCourse) {
    int input;
    bool exit;
    do {
-      displayWeightSetting(searchCourse);
+    //  displayWeightSetting(searchCourse);
       exit = false;
       seperatorDouble();
       cout << "1. Modify quiz setting" << endl;
@@ -193,16 +141,16 @@ void modifyWeightSettingMenu(const char* searchCourse) {
       cout << endl;
       switch (input) {
       case 1:
-         modifyQuizWeightSetting();
-         displayWeightSetting(searchCourse);
+      //   modifyQuizWeightSetting();
+       //  displayWeightSetting(searchCourse);
          break;
       case 2:
-         modifyAssignWeightSetting();
-         displayWeightSetting(searchCourse);
+      //   modifyAssignWeightSetting();
+       //  displayWeightSetting(searchCourse);
          break;
       case 3:
-         modifyTestWeightSetting();
-         displayWeightSetting(searchCourse);
+       //  modifyTestWeightSetting();
+       //  displayWeightSetting(searchCourse);
          break;
       case 0:
          exit = true;

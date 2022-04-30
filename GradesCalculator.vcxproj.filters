@@ -24,12 +24,30 @@
     <ClCompile Include="Grade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grade.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commonFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
