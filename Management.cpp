@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <fstream>
 #include "Management.h"
+#include "Requirement.h"
 #include "commonFunctions.h"
 #include "Menu.h"
 using namespace std;
@@ -14,8 +15,16 @@ namespace yh {
       m_numGrades = 0;
    }
 
+   void Management::deallocateRequirements() {
+      for (int i = 0; i < m_numRequires; i++) {
+         delete m_require[i];
+      }
+      m_numRequires = 0;
+   }
+
    Management::~Management() {
       deallocateGrades();
+      deallocateRequirements();
    }
 
    void Management::run() {
@@ -23,6 +32,7 @@ namespace yh {
       Menu subMenu("1 | View Grades\n2 | Modify grades\n3 | Modify weights\n4 | Requirement to Pass\n5 | Change Course\n", 5);
       cout << "Starting Grades Calculator" << endl;
       loadGrades();
+      loadRequirements();
       cout << "-------------------------------" << endl;
       do {
          cout << "Grades Calculator" << endl;
@@ -43,6 +53,7 @@ namespace yh {
          case 3:
             break;
          case 4:
+            viewRequirements();
             break;
          case 5:
             changeCourseCode();
@@ -123,7 +134,7 @@ namespace yh {
    // 2-1 | Insert Grades
    void Management::insertGrades() {
       cout << endl;
-      if (m_numGrades >= max_grades) {
+      if (m_numGrades >= max) {
          cout << "Database full!" << endl;
       }
       else {
@@ -212,6 +223,14 @@ namespace yh {
       }
       m_numGrades--;
    }
+   // 4 | View requirement to Pass
+   void Management::viewRequirements() {
+      for (int i = 0; i < m_numRequires; i++) {
+         if (!strcmp(m_require[i]->getCourse(), m_course)) {
+            cout << *m_require[i] << endl;
+         }
+      }
+   }
 
    // 5 | Change Course
    void Management::changeCourseCode() {
@@ -273,6 +292,31 @@ namespace yh {
          cout << m_numGrades << " grades loaded!" << endl;
       }
       return m_numGrades;
+   }
+
+   int Management::loadRequirements() {
+      deallocateRequirements();
+      ifstream datafile("requirement.csv");
+      if (!datafile) {
+         // No file
+         datafile.close();
+         cerr << "--- ERROR: Requirement file INACCESIBLE" << endl;
+      }
+      else {
+         do {
+            m_require[m_numRequires] = new Requirement();
+            m_require[m_numRequires]->load(datafile);
+            if (m_require[m_numRequires] && !datafile.fail()) {
+               m_numRequires++;
+            }
+            else {
+               delete m_require[m_numRequires];
+            }
+         } while (datafile);
+         datafile.close();
+      }
+      cout << m_numRequires << " requirements loaded!" << endl;
+      return m_numRequires;
    }
 
 

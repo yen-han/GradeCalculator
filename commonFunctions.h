@@ -10,7 +10,7 @@ namespace yh {
    void seperatorDouble();
    void allocateCopy(char*& desc, const char* src);
    int getint(int min, int max);
-   char* getDynCstr(std::istream& istr, char delim);
+   char* getDynCstr(std::istream& istr, char delim='\n');
 }
 
 #endif // !YH_COMMONFUNCTIONS_H_

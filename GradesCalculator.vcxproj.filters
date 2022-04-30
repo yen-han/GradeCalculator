@@ -33,6 +33,9 @@
     <ClCompile Include="Management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Requirement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grade.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Management.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Requirement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
