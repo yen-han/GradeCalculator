@@ -4,7 +4,7 @@ namespace yh {
    class Grade {
       char m_courseCode[10]{};
       int m_week{}; // To sort
-      char m_type = 'N'; // Q: quiz, T: test, A: assignment, N: none
+      char m_type = 'N'; // L:Lab Q: quiz, T: test, A: assignment, N: none
       char* m_title{};
       double m_score{};
       double m_fullMark{};

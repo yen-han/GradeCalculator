@@ -3,7 +3,6 @@
 #include <iomanip>
 #include <fstream>
 #include "Management.h"
-#include "Requirement.h"
 #include "commonFunctions.h"
 #include "Menu.h"
 using namespace std;
@@ -42,16 +41,19 @@ namespace yh {
          if (selection!=5 && m_course[0] == '\0') selection = 5;
 
          switch (selection) {
-            // 1 | View grades
+            // 1 | View Grades
          case 1:
             viewGrades();
             cout << endl;
             break;
+            // 2 | Modify Grades
          case 2:
             modifyGrades();
             break;
+            // 3 | Modify weight
          case 3:
             break;
+            // 4 | Requirement to Pass
          case 4:
             viewRequirements();
             break;
@@ -67,6 +69,8 @@ namespace yh {
    }
    // 1 | View Grades
    void Management::viewGrades() {
+      int foundRequire = searchRequirements(m_course);
+      double subtotal = 0;
       cout << endl<< "Week     | ";
       for (int i = 0; i < m_numGrades; i++) {
          if (!strcmp(m_grades[i]->getCourse(), m_course)) {
@@ -99,6 +103,29 @@ namespace yh {
             cout << m_grades[i]->getFullMark() << " | ";
          }
       }
+      cout << endl;
+      cout << "Weighted | ";
+      for (int i = 0; i < m_numGrades; i++) {
+         if (!strcmp(m_grades[i]->getCourse(), m_course)) {
+            cout << setw(8);
+            cout << (m_require[foundRequire]->calculateWeight(m_grades[i]->getType())) << " | ";
+         }
+      }
+      cout << endl;
+      cout << "Total    | ";
+      for (int i = 0; i < m_numGrades; i++) {
+         if (!strcmp(m_grades[i]->getCourse(), m_course)) {
+            cout << setw(8);
+            cout << m_grades[i]->getScore()/ m_grades[i]->getFullMark()*(m_require[foundRequire]->calculateWeight(m_grades[i]->getType()))<< " | ";
+            subtotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * (m_require[foundRequire]->calculateWeight(m_grades[i]->getType()));
+         }
+      }
+      cout << endl<<endl;
+      cout.setf(ios::fixed);
+      cout.precision(2);
+      cout << "Total mark : " << subtotal <<" % / 100 %" << endl;
+      cout << "Remaining  : " << m_require[foundRequire] ->getOverall()-subtotal<< " % To Pass";
+      cout.unsetf(ios::fixed);
       cout << endl;
    }
    // 2 | Modify Grades
@@ -161,7 +188,7 @@ namespace yh {
       int week; char type;
       cout << "Week : ";
       cin >> week;
-      cout << "Type(Q|quiz A|Assignment T|Test): ";
+      cout << "Type(L|lab Q|quiz A|Assignment T|Test): ";
       cin >> type;
       foundIdx = search(week, type);
       if (foundIdx < 0) {
@@ -171,13 +198,14 @@ namespace yh {
          cout <<"--- Before"<< endl<<* m_grades[foundIdx] << endl;
          Grade* temp = new Grade();
          temp->read(cin, m_course);
-         cout <<"--- After"<< endl << *temp << endl;
+         cout <<endl<<"--- After"<< endl << *temp << endl;
          Menu subMenu("Are you sure to modify?\n1 | Yes\n", 1);
          if (subMenu.run() == 1) {
             m_grades[foundIdx] = temp;
+            cout << "Grade modified" << endl;
          }
          else {
-            cout << "Aborted!" << endl << endl;
+            cout << "Aborted" << endl << endl;
          }
       }
    }
@@ -197,7 +225,7 @@ namespace yh {
       int week; char type;
       cout << "Week : ";
       cin >> week;
-      cout << "Type(Q|quiz A|Assignment T|Test): ";
+      cout << "Type(L|lab Q|quiz A|Assignment T|Test): ";
       cin >> type;
       foundIdx = search(week, type);
       if (foundIdx < 0) {
@@ -205,13 +233,13 @@ namespace yh {
       }
       else {
          cout << "--- Grade to be Remove" << endl << *m_grades[foundIdx] << endl;
-         Menu subMenu("Are you sure to remove?\n1 | Yes\n", 1);
+         Menu subMenu("Are you sure to delete?\n1 | Yes\n", 1);
          if (subMenu.run() == 1) {
             remove(foundIdx);
-            cout << "Grade removed" << endl;
+            cout << "Grade deleted" << endl;
          }
          else {
-            cout << "Aborted!" << endl << endl;
+            cout << "Aborted" << endl << endl;
          }
       }
    }
@@ -248,7 +276,18 @@ namespace yh {
                done = true;
             }
          }
-         if (!done) cout << "--- ERROR: Course is not found" << endl<<endl;
+         if (!done) {
+          cout << "--- ERROR: Grade of the Course is not found" << endl<<endl;
+          Menu subMenu("Do you want to add the course?\n1 | Yes\n", 1);
+          if (subMenu.run() == 1) {
+             insertGrades();
+             done = true;
+          }
+          else {
+             cin.ignore();
+             cout << "Aborted" << endl << endl;
+          }
+         }
       } while (!done);
       cout << endl;
    }
@@ -317,6 +356,16 @@ namespace yh {
       }
       cout << m_numRequires << " requirements loaded!" << endl;
       return m_numRequires;
+   }
+
+   int Management::searchRequirements(const char* course) {
+      int foundIdx = -1;
+      for (int i = 0; i < m_numRequires; i++) {
+         if (!strcmp(m_require[i]->getCourse(), m_course)) {
+            foundIdx = i;
+         }
+      }
+      return foundIdx;
    }
 
 

@@ -27,6 +27,7 @@ namespace yh {
       void saveGrades();
       int loadGrades();
       int loadRequirements();
+      int searchRequirements(const char* course);
    public: 
       Management() {};
       Management(const Management&) = delete;
@@ -36,4 +37,4 @@ namespace yh {
 
    };
 }
-#endif YH_MANAGEMENT_H_
+#endif //!YH_MANAGEMENT_H_

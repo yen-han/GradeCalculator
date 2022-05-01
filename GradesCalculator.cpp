@@ -19,7 +19,6 @@ using namespace yh;
 bool subjectMenu(const char* searchCourse);
 void displayGradesMenu(const char* searchCourse, int& numGrades);
 void modifyWeightSettingMenu(const char* searchCourse);
-void readRequirement(const char* searchCourse, double totalScore);
 
 int main() {
    Management().run();
@@ -72,7 +71,7 @@ bool subjectMenu(const char* searchCourse) {
 
             //4. Requirement to Pass
          case 4:
-            readRequirement(searchCourse, totalScore);
+
             break;
 
             // 0. Exit
@@ -159,52 +158,3 @@ void modifyWeightSettingMenu(const char* searchCourse) {
    } while (!exit);
 }
 
-void readRequirement(const char* searchCourse, double totalScore) {
-   FILE* fptr = nullptr;
-   fptr = fopen("requirement.csv", "r");
-   char subject[10] = { '\0' };
-   char requirement[100];
-   bool found = false;
-   if (fptr != nullptr) {
-
-      cout << "*** Requirements To Pass for " << searchCourse << " ***"<< endl;
-      cout << "----------------------------------" << endl;
-      while (fscanf(fptr, "%[^,],%[^\n]\n", subject, requirement) == 2) {
-         if (strstr(subject, searchCourse) != nullptr) {
-            cout << requirement << endl;
-            found = true;
-         }
-      }
-      cout << endl;
-      fclose(fptr);
-      fptr = nullptr;
-      if (!found) {
-         char answer;
-         char add;
-         cout << "Requirements not Found" << endl;
-         cout << "Add requirements? (Y/N)" << endl << ">>>";
-         cin >> answer;
-         answer = toUpperCharacter(answer);
-         cin.ignore();
-         if (answer == 'Y' || answer == 'y') {
-            do {
-               cout << "Requirements to Pass: ";
-               cin.getline(requirement, 50);
-               fptr = fopen("requirement.csv", "a");
-               fprintf(fptr, "%s,%s\n", searchCourse, requirement);
-               cout << "Continue to Add (Y/N)?" << endl << " >>>";
-               cin.get(add);
-               add = toUpperCharacter(add);
-               cin.ignore();
-               fclose(fptr);
-               fptr = nullptr;
-            } while (add == 'Y');
-         }
-      }
-      // minimum TO pass
-      cout << "Minimum to Pass: " <<(50-totalScore)<< " % / 50 %" << endl<<endl;
-   }
-   else {
-      cout << "--- ERROR:: FILE NOT FOUND" << endl;
-   }
-}
