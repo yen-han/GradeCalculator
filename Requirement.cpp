@@ -3,11 +3,9 @@
 #include <fstream>
 #include <cstring>
 #include "Requirement.h"
-
 #include "commonFunctions.h"
 namespace yh {
-   const char* Requirement::getName(int num) const {
-      char name[15] = {'\0'};
+   const char* Requirement::getName(char* name, int num) const {
       if (num == 1) strcpy(name, m_require1);
       if (num == 2) strcpy(name, m_require2);
       if (num == 3) strcpy(name, m_require3);

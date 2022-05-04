@@ -3,7 +3,7 @@
 namespace yh {
    class Grade {
       char m_courseCode[10]{};
-      int m_week{}; // To sort
+      int m_no{}; // To sort
       char m_type = 'N'; // L:Lab Q: quiz, T: test, A: assignment, N: none
       char* m_title{};
       double m_score{};
@@ -12,20 +12,20 @@ namespace yh {
    public:
       // Constructors
       Grade();
-      Grade(const char* courseCode, int week, const char* title, char type, double score=0, double fullMark = 100);
+      Grade(const char* courseCode, int no, const char* title, char type, double score=0, double fullMark = 100);
       // Destructor
       virtual ~Grade();
       // Copy constructor
-      Grade(const Grade& toCopyFrom);
+      Grade(const Grade& grade);
       // Copy assignment
-      Grade& operator=(const Grade& toCopyFrom);
+      Grade& operator=(const Grade& grade);
 
       // Reset recognized invalid state
       Grade& resetInfo();
       // Deallocate m_title
       void deallocate();
       // Create & SET GRADE
-      Grade& setInfo(const char* courseCode, int week, const char* title, char type, double score = 0, double fullMark = 100);
+      Grade& setInfo(const char* courseCode, int no, const char* title, char type, double score = 0, double fullMark = 100);
       // Create & SET TITLE
       Grade& setTitle(const char* title);
       // Create & SET SCORE 
@@ -35,7 +35,7 @@ namespace yh {
 
       const char* getCourse() const;
       // GET WEEK#
-      int getWeek() const;
+      int getNo() const;
       // GET TITLE of grade
       const char* getTitle() const;
       // GET SCORE 
@@ -44,8 +44,6 @@ namespace yh {
       double getFullMark() const;
       // GET TYPE
       char getType() const;
-      // Get weighted score on each
-      double getWeightedScore() const;
 
       // Report grades
       std::ostream& display(std::ostream& ostr) const;
@@ -59,42 +57,6 @@ namespace yh {
    };
 
    std::ostream& operator<<(std::ostream& ostr, const Grade& g);
-
-   //// Read All Weight Setting On the course
-   //extern void readWeightSetting(const char* searchCourse);
-
-   //// Display Grades in format
-   //extern std::ostream& displayGrades(const char* searchCourse, const int numGrades);
-
-   //extern std::ostream& displayQuiz(const char* searchCourse, const int numGrades);
-
-   //extern std::ostream& displayAssignment(const char* searchCourse, const int numGrades);
-   //extern std::ostream& displayTest(const char* searchCourse, const int numGrades);
-
-   //// Insert/Create New grades
-   //extern void insertGrades(const char* searchCourse, int& numGrades);
-   //// Update existing grades
-   //extern void updateGrades(const char* searchCourse, int& numGrades);
-   //// Delete existing grades
-   //extern void deleteGrades(const char* searchCourse, int& numGrades);
-   //
-   //// Get Grade input 
-   //void getGradeInput(int& week, char* title, char& type, double& score, double& fullMark);
-   //// Find matched grades by week, type info
-   //int findMatchedIndex(const int numGrades);
-
-   //// Display Weight setting
-   //void displayWeightSetting(const char* searchCourse);
-   //// Update QUIZ Weight setting
-   //void modifyQuizWeightSetting();
-   //// Update ASSIGNMENT Weight setting
-   //void modifyAssignWeightSetting();
-   //// Update TEST Weight setting
-   //void modifyTestWeightSetting();
-   //void selectionSort(int numGrades);
-
-   //// Delete Dynamic allocated memory
-   //extern void clearMemory();
 }
 
 #endif // !YH_GRADE_H_

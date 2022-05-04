@@ -38,7 +38,6 @@ namespace yh {
       //Weight* m_weight[100]{};
      // int m_numWeight{};
    protected:
-      const char* getName(int num)const;
       int getCount(int num) const;
       double getWeight(int num) const;
    public:
@@ -49,10 +48,10 @@ namespace yh {
       const char* getCourse() const;
       double getOverall() const;
       double calculateWeight(char type);
+      const char* getName(char* name, int num)const;
 
       std::ostream& display(std::ostream& ostr) const;
       std::ifstream& load(std::ifstream& ifstr);
-
    };
 
    std::ostream& operator<<(std::ostream& ostr, const Requirement& r);

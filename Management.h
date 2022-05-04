@@ -16,6 +16,7 @@ namespace yh {
       void deallocateGrades();
       void deallocateRequirements();
       void viewGrades();
+      double viewTypeGrades(char type, int foundRequire);
       void modifyGrades();
       void insertGrades();
       void updateGrades();
@@ -28,6 +29,7 @@ namespace yh {
       int loadGrades();
       int loadRequirements();
       int searchRequirements(const char* course);
+      void sort();
    public: 
       Management() {};
       Management(const Management&) = delete;

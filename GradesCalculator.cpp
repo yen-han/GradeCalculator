@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <fstream>
 #include <cstdio>
 #include <cstring>
 #include "commonFunctions.h"
@@ -20,7 +21,15 @@ bool subjectMenu(const char* searchCourse);
 void displayGradesMenu(const char* searchCourse, int& numGrades);
 void modifyWeightSettingMenu(const char* searchCourse);
 
+void copyfile(const char* to, const char* from) {
+   std::ifstream in(from);
+   std::ofstream out(to);
+   char ch;
+   while (in.get(ch)) out.put(ch);
+}
+
 int main() {
+   copyfile("grade.csv", "grade_root.csv");
    Management().run();
    return 0;
 }
