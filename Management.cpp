@@ -74,7 +74,7 @@ namespace yh {
             break;
             // 0 | Save & Exit
          case 0:
-            sort();
+            sortByNo();
             saveGrades();
             break;
          }
@@ -83,13 +83,13 @@ namespace yh {
    }
    // 1 | View Grades
    void Management::viewGrades() {
-      sort();
       int foundWeight = searchWeights(m_course, 'W');
       int foundRequire = searchRequirements(m_course);
       double subtotal = 0;
       cout << endl <<"<< "<< m_weight[foundWeight]->getRequireName() << " >>" << endl;
       subtotal += viewTypeGrades('W', foundWeight);
       cout << endl << endl;
+
       foundWeight = searchWeights(m_course, 'A');
       cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
       subtotal += viewTypeGrades('A', foundWeight);
@@ -121,12 +121,20 @@ namespace yh {
       cout << endl;
    }
    double Management::viewTypeGrades(char type, int foundWeight) {
+      checkForBestMark(type, foundWeight);
+      sortByNo();
       double eachTotal = 0;
       cout << "No.      | ";
       for (int i = 0; i < m_numGrades; i++) {
          if (!strcmp(m_grades[i]->getCourse(), m_course)&& m_grades[i]->getType()==type) {
+            if (m_grades[i]->getBest()==1) {
+               (m_grades[i]->getNo()>9? cout << setw(5): cout << setw(6));
+               cout << "*";
 
-            cout << setw(7);
+            }
+            else {
+               (m_grades[i]->getNo() > 9 ? cout << setw(6) : cout << setw(7));
+            }
             cout << "#" << m_grades[i]->getNo() << " | ";
          }
       }
@@ -182,14 +190,32 @@ namespace yh {
             cout << m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
                m_grades[i]->getNo()) << " | ";
             cout.unsetf(std::ios::fixed);
-            eachTotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
-               m_grades[i]->getNo());
+            if (m_weight[foundWeight]->getCount() == m_weight[foundWeight]->getMax()) {
+               eachTotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+                  m_grades[i]->getNo());
+
+            }
+            else {
+               if (m_grades[i]->getBest()) {
+                  eachTotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+                     m_grades[i]->getNo());
+
+               }
+            }
          }
       }
-      cout.setf(std::ios::fixed);
-      cout.precision(2);
-      cout << endl << endl<< "- Sum of " << m_weight[foundWeight]->getRequireName() << ": " << eachTotal<<"% / "<< m_weight[foundWeight]->getTotalWeight()<<"%";
-      cout.unsetf(std::ios::fixed);
+      if (m_weight[foundWeight]->getCount() == m_weight[foundWeight]->getMax()) {
+         cout.setf(std::ios::fixed);
+         cout.precision(2);
+         cout << endl << endl << "- Sum of " << m_weight[foundWeight]->getRequireName() << "s: " << eachTotal << "% / " << m_weight[foundWeight]->getTotalWeight() << "%";
+         cout.unsetf(std::ios::fixed);
+      }
+      else {
+         cout.setf(std::ios::fixed);
+         cout.precision(2);
+         cout << endl << endl << "- Best " << m_weight[foundWeight]->getCount() << " of " << m_weight[foundWeight]->getRequireName() << "s: " << eachTotal << " % / " << m_weight[foundWeight]->getTotalWeight() << " % ";
+         cout.unsetf(std::ios::fixed);
+      }
       return eachTotal;
    }
 
@@ -234,7 +260,7 @@ namespace yh {
          temp->read(cin, m_course);
          cout << endl;
          if (search(temp->getNo(), temp->getType()) > 0) {
-            cout << "week: " << temp->getNo() << ", Type "<< temp->getType()<<" is already in the system." << endl << endl;
+            cout << "week: " << temp->getNo() << ", Type "<< temp->getType()<<" is already in the system.";
             delete temp;
          }
          else {
@@ -262,10 +288,10 @@ namespace yh {
    void Management::updateGrades() {
       int foundIdx = -1;
       int week; char type;
-      cout << endl<< "No. : ";
-      cin >> week;
-      cout << "Type(W|weekly Q|quiz A|Assignment T|Test): ";
+      cout << endl << "Type(W|weekly Q|quiz A|Assignment T|Test): ";
       cin >> type;
+      cout << "No. : ";
+      cin >> week;
       foundIdx = search(week, type);
       cout << endl;
       if (foundIdx < 0) {
@@ -301,10 +327,10 @@ namespace yh {
    void Management::removeGrades() {
       int foundIdx = -1;
       int no; char type;
-      cout << "No. : ";
-      cin >> no;
       cout << "Type(W|weekly Q|quiz A|Assignment T|Test): ";
       cin >> type;
+      cout << "No. : ";
+      cin >> no;
       foundIdx = search(no, type);
       if (foundIdx < 0) {
          cout << "---ERROR: Grade not found" << endl;
@@ -401,7 +427,7 @@ namespace yh {
          saveFile.close();
       }
    }
-
+   // Load grades
    int Management::loadGrades() {
       saveGrades();
       deallocateGrades();
@@ -434,7 +460,7 @@ namespace yh {
       } while (!found);
       return m_numGrades;
    }
-
+   // Load requirements
    int Management::loadRequirements() {
       deallocateRequirements();
       ifstream datafile("requirement.csv");
@@ -462,7 +488,7 @@ namespace yh {
       cout << m_numRequires << " requirements loaded!" << endl;
       return m_numRequires;
    }
-
+   // Load weights
    int Management::loadWeights() {
       deallocateWeights();
       ifstream datafile("weight.csv");
@@ -520,8 +546,6 @@ namespace yh {
       return foundIdx;
    }
 
-
-
    void Management::letterGrade(double subtotal) {
       if (subtotal >= 90) cout << "A+ (4.0)";
       else if (subtotal >= 80) cout << "A (4.0)";
@@ -537,7 +561,7 @@ namespace yh {
    }
 
    // Sorting: Numerically by m_no
-   void Management::sort() {
+   void Management::sortByNo() {
       int i, j, toCompare;
       for (i = 0; i < m_numGrades-1; i++) {
          toCompare = i;
@@ -550,6 +574,36 @@ namespace yh {
             }
          }
       }
-   }   
-   // Sorting: Numerically by total
+   }
+   // Check for best mark
+   void Management::checkForBestMark(char type, int foundWeight) {
+      if (m_weight[foundWeight]->getCount() < m_weight[foundWeight]->getMax()) {
+         int i, j, toCompare;
+         for (i = 0; i < m_numGrades - 1; i++) {
+            if (!strcmp(m_grades[i]->getCourse(), m_course)&& m_grades[i]->getType() == type) {
+               toCompare = i;
+               for (j = i + 1; j < m_numGrades; j++) {
+                  if (!strcmp(m_grades[toCompare]->getCourse(), m_grades[j]->getCourse()) 
+                     && m_grades[toCompare]->getType() == m_grades[j]->getType()
+                     && (m_grades[toCompare]->getScore() / m_grades[toCompare]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+                        m_grades[toCompare]->getNo())) < (m_grades[j]->getScore() / m_grades[j]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+                           m_grades[j]->getNo()))) {
+                     Grade* temp = m_grades[toCompare];
+                     m_grades[toCompare] = m_grades[j];
+                     m_grades[j] = temp;
+                     //delete temp;
+                  }
+               }
+            }
+
+         }
+         for (i = 0, j = 0; j < m_weight[foundWeight]->getCount() && i < m_numGrades; i++) {
+            if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type ) {
+               m_grades[i]->setBest(1);
+               j++;
+            }
+         }
+      }
+   }
+
 }

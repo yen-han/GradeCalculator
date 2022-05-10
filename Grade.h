@@ -8,10 +8,10 @@ namespace yh {
       char* m_title{};
       double m_score{};
       double m_fullMark{};
-
+      int m_best{}; // 1:Best 0:Drop
    public:
       // Constructors
-      Grade();
+      Grade() {};
       Grade(const char* courseCode, int no, const char* title, char type, double score=0, double fullMark = 100);
       // Destructor
       virtual ~Grade();
@@ -21,7 +21,7 @@ namespace yh {
       Grade& operator=(const Grade& grade);
 
       // Reset recognized invalid state
-      Grade& resetInfo();
+      //Grade& resetInfo();
       // Deallocate m_title
       void deallocate();
       // Create & SET GRADE
@@ -44,6 +44,8 @@ namespace yh {
       double getFullMark() const;
       // GET TYPE
       char getType() const;
+      int getBest() const;
+      void setBest(int best);
 
       // Report grades
       std::ostream& display(std::ostream& ostr) const;

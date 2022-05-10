@@ -7,22 +7,22 @@
 #include "commonFunctions.h"
 using namespace std;
 namespace yh {
-   Grade& Grade::resetInfo() {
-      m_courseCode[0] = '\0';
-      m_no = 0;
-      m_type = 'N'; // None
-      m_title = nullptr;
-      m_score = 0; 
-      m_fullMark=0;
-      return *this;
-   }
+   //Grade& Grade::resetInfo() {
+   //   m_courseCode[0] = '\0';
+   //   m_no = 0;
+   //   m_type = 'N'; // None
+   //   m_title = nullptr;
+   //   m_score = 0; 
+   //   m_fullMark=0;
+   //   return *this;
+   //}
 
-   Grade::Grade() {
-      resetInfo();
-   }
+   //Grade::Grade() {
+   //   resetInfo();
+   //}
  
    Grade::Grade(const char* courseCode, int no, const char* title, char type, double score, double fullMark) {
-      resetInfo();
+      //resetInfo();
       if (title!= nullptr) {
          strcpy(m_courseCode, courseCode);
          m_no = no;
@@ -42,7 +42,7 @@ namespace yh {
       deallocate();
    }
    Grade::Grade(const Grade& grade) {
-      resetInfo();
+      //resetInfo();
       if (grade.isValid()) {
          operator=(grade);
       }
@@ -60,7 +60,8 @@ namespace yh {
    }
    Grade& Grade::setInfo(const char* courseCode, int no, const char* title, char type, double score, double fullMark) {
       delete[] m_title;
-      resetInfo();
+      m_title = nullptr;
+      //resetInfo();
       if (title != nullptr) {
          strcpy(m_courseCode, courseCode);
          m_no = no;
@@ -107,6 +108,14 @@ namespace yh {
    }
    char Grade::getType() const {
       return m_type;
+   }
+
+   int Grade::getBest() const {
+      return m_best;
+   }
+
+   void Grade::setBest(int best) {
+      m_best = best;
    }
 
    ostream& Grade::display(ostream& ostr) const {

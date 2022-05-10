@@ -38,7 +38,8 @@ namespace yh {
       int searchRequirements(const char* course);
       int searchWeights(const char* course, char type);
       void gradeChart();
-      void sort();
+      void sortByNo();
+      void checkForBestMark(char type, int foundWeight);
    public: 
       Management() {};
       Management(const Management&) = delete;
