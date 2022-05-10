@@ -20,6 +20,18 @@ The program calculates GPA for a semester. With the given requirement to pass th
 -	Open the grade file.   
 -	Select the course to view.   
 
+## Module
+- Management  
+- Menu  
+- Grade   
+- Requirement   
+- iWeight  
+- Weight  
+- NotEvenWeight  
+- commonFunctions  
   
 ## Data file  
+grade.csv  
+requirement.csv  
+weight.csv  
 
