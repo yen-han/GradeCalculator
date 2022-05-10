@@ -36,6 +36,12 @@
     <ClCompile Include="Requirement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="iWeight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NotEvenWeight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grade.h">
@@ -47,13 +53,19 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Weight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Management.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Requirement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iWeight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotEvenWeight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

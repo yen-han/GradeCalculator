@@ -2,6 +2,7 @@
 #define YH_MANAGEMENT_H_
 #include "Grade.h"
 #include "Requirement.h"
+#include "iWeight.h"
 namespace yh {
    const int max = 100;
 
@@ -12,10 +13,15 @@ namespace yh {
       int m_numGrades{};
       Requirement* m_require[max]{};
       int m_numRequires{};
+      iWeight* m_weight[max]{};
+      int m_numWeight{};
 
       void deallocateGrades();
       void deallocateRequirements();
+      void deallocateWeights();
+      //void viewCourse();
       void viewGrades();
+      void letterGrade(double subtotal);
       double viewTypeGrades(char type, int foundRequire);
       void modifyGrades();
       void insertGrades();
@@ -28,7 +34,10 @@ namespace yh {
       void saveGrades();
       int loadGrades();
       int loadRequirements();
+      int loadWeights();
       int searchRequirements(const char* course);
+      int searchWeights(const char* course, char type);
+      void gradeChart();
       void sort();
    public: 
       Management() {};

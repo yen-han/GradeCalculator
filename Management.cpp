@@ -5,6 +5,8 @@
 #include "Management.h"
 #include "commonFunctions.h"
 #include "Menu.h"
+#include "Weight.h"
+#include "NotEvenWeight.h"
 using namespace std;
 namespace yh {
    void Management::deallocateGrades() {
@@ -20,25 +22,33 @@ namespace yh {
       }
       m_numRequires = 0;
    }
+   void Management::deallocateWeights() {
+      for (int i = 0; i < m_numWeight; i++) {
+         delete m_weight[i];
+      }
+      m_numWeight = 0;
+   }
 
    Management::~Management() {
       deallocateGrades();
       deallocateRequirements();
+      deallocateWeights();
    }
 
    void Management::run() {
       int selection;
-      Menu subMenu("1 | View Grades\n2 | Modify grades\n3 | Modify weights\n4 | Requirement to Pass\n5 | Change Course\n", 5);
+      Menu subMenu("1 | View Grades\n2 | Modify grades\n3 | Requirement to Pass\n4 | View Grade Chart\n5 | Change Course\n", 5);
       cout << "Starting Grades Calculator" << endl;
       loadGrades();
       loadRequirements();
+      loadWeights();
       do {
          cout << "-------------------------------" << endl;
          cout << "Grades Calculator" << endl;
          cout << "Course: " << (m_course[0] == '\0' ? "N/A" : m_course) << endl;
          cout << "-------------------------------" << endl;
          selection = subMenu.run();
-         if (selection!=5 && m_course[0] == '\0') selection = 5;
+         if ((selection == 1 || selection==2||selection==3) && m_course[0] == '\0') selection = 5;
 
          switch (selection) {
             // 1 | View Grades
@@ -50,12 +60,13 @@ namespace yh {
          case 2:
             modifyGrades();
             break;
-            // 3 | Modify weight
+            // 3 | Requirement to Pass
          case 3:
-            break;
-            // 4 | Requirement to Pass
-         case 4:
             viewRequirements();
+            break;
+            // 4 | View Grade Chart
+         case 4:
+            gradeChart();
             break;
             // 5 | Change Course
          case 5:
@@ -73,21 +84,28 @@ namespace yh {
    // 1 | View Grades
    void Management::viewGrades() {
       sort();
+      int foundWeight = searchWeights(m_course, 'W');
       int foundRequire = searchRequirements(m_course);
       double subtotal = 0;
-      char name[15] = { '\0' };
-      cout << endl <<"<< "<< m_require[foundRequire]->getName(name, 1)<< " >>"<< endl;
-      subtotal += viewTypeGrades('W', foundRequire);
+      cout << endl <<"<< "<< m_weight[foundWeight]->getRequireName() << " >>" << endl;
+      subtotal += viewTypeGrades('W', foundWeight);
       cout << endl << endl;
-      cout << "<< " << m_require[foundRequire]->getName(name, 2) << " >>" << endl;
-      subtotal += viewTypeGrades('A', foundRequire);
+      foundWeight = searchWeights(m_course, 'A');
+      cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
+      subtotal += viewTypeGrades('A', foundWeight);
       cout << endl << endl;
-      cout << "<< " << m_require[foundRequire]->getName(name, 3) << " >>" << endl;
-      subtotal += viewTypeGrades('Q', foundRequire);
+
+      foundWeight = searchWeights(m_course, 'Q');
+      if (foundWeight > -1) {
+         cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
+         subtotal += viewTypeGrades('Q', foundWeight);
+         cout << endl << endl;
+      }
+      foundWeight = searchWeights(m_course, 'T');
+      cout << "<< " << m_weight[foundWeight]->getRequireName()  << " >>" << endl;
+      subtotal += viewTypeGrades('T', foundWeight);
       cout << endl << endl;
-      cout << "<< Test >>" << endl;
-      subtotal += viewTypeGrades('T', foundRequire);
-      cout << endl << endl;
+
       cout.setf(ios::fixed);
       cout.precision(2);
       cout << "Total mark : " << subtotal <<" % / 100 %" << endl;
@@ -95,13 +113,14 @@ namespace yh {
          cout << "Remaining  : " << m_require[foundRequire]->getOverall() - subtotal << " % To Pass";
       }
       else {
-         cout << "Remaining  : 0 % To Pass";
+         cout << "Remaining  : 0 % To Pass"<<endl;
+         cout << "Grade      : ";
+         letterGrade(subtotal);
       }
       cout.unsetf(ios::fixed);
       cout << endl;
    }
-
-   double Management::viewTypeGrades(char type, int foundRequire) {
+   double Management::viewTypeGrades(char type, int foundWeight) {
       double eachTotal = 0;
       cout << "No.      | ";
       for (int i = 0; i < m_numGrades; i++) {
@@ -124,7 +143,10 @@ namespace yh {
       for (int i = 0; i < m_numGrades; i++) {
          if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type) {
             cout << setw(8);
+            cout.setf(std::ios::fixed);
+            cout.precision(1);
             cout << m_grades[i]->getScore() << " | ";
+            cout.unsetf(std::ios::fixed);
          }
       }
       cout << endl;
@@ -133,7 +155,7 @@ namespace yh {
          if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type) {
             cout << setw(8);
             cout.setf(std::ios::fixed);
-            cout.precision(2);
+            cout.precision(0);
             cout << m_grades[i]->getFullMark() << " | ";
             cout.unsetf(std::ios::fixed);
          }
@@ -143,7 +165,11 @@ namespace yh {
       for (int i = 0; i < m_numGrades; i++) {
          if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type) {
             cout << setw(8);
-            cout << (m_require[foundRequire]->calculateWeight(m_grades[i]->getType())) << " | ";
+            cout.setf(std::ios::fixed);
+            cout.precision(2);
+            cout << m_weight[foundWeight]->calculateWeight(
+               m_grades[i]->getNo()) << " | ";
+            cout.unsetf(std::ios::fixed);
          }
       }
       cout << endl;
@@ -151,10 +177,19 @@ namespace yh {
       for (int i = 0; i < m_numGrades; i++) {
          if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type) {
             cout << setw(8);
-            cout << m_grades[i]->getScore() / m_grades[i]->getFullMark() * (m_require[foundRequire]->calculateWeight(m_grades[i]->getType())) << " | ";
-            eachTotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * (m_require[foundRequire]->calculateWeight(m_grades[i]->getType()));
+            cout.setf(std::ios::fixed);
+            cout.precision(2);
+            cout << m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+               m_grades[i]->getNo()) << " | ";
+            cout.unsetf(std::ios::fixed);
+            eachTotal += m_grades[i]->getScore() / m_grades[i]->getFullMark() * m_weight[foundWeight]->calculateWeight(
+               m_grades[i]->getNo());
          }
       }
+      cout.setf(std::ios::fixed);
+      cout.precision(2);
+      cout << endl << endl<< "- Sum of " << m_weight[foundWeight]->getRequireName() << ": " << eachTotal<<"% / "<< m_weight[foundWeight]->getTotalWeight()<<"%";
+      cout.unsetf(std::ios::fixed);
       return eachTotal;
    }
 
@@ -213,7 +248,7 @@ namespace yh {
                }
                else {
                   cin.ignore();
-                  cout << "--- Aborted" << endl << endl;
+                  cout << "--- Aborted" << endl;
                }
             }
             else {
@@ -227,23 +262,24 @@ namespace yh {
    void Management::updateGrades() {
       int foundIdx = -1;
       int week; char type;
-      cout << "Week : ";
+      cout << endl<< "No. : ";
       cin >> week;
       cout << "Type(W|weekly Q|quiz A|Assignment T|Test): ";
       cin >> type;
       foundIdx = search(week, type);
+      cout << endl;
       if (foundIdx < 0) {
-         cout << "---ERROR: Grade not found" << endl;
+         cout << "--- ERROR: Grade not found" ;
       }
       else {
-         cout <<"--- Before"<< endl<<* m_grades[foundIdx] << endl;
+         cout << "--- Before"<< endl<<* m_grades[foundIdx] << endl;
          Grade* temp = new Grade();
          temp->read(cin, m_course);
          cout <<endl<<"--- After"<< endl << *temp << endl;
          Menu subMenu("Are you sure to modify?\n1 | Yes\n", 1);
          if (subMenu.run() == 1) {
             m_grades[foundIdx] = temp;
-            cout << "Grade Successfully modified" << endl;
+            cout << "Grade Successfully modified";
          }
          else {
             cin.ignore();
@@ -252,10 +288,10 @@ namespace yh {
       }
    }
    // Search grade by week & type
-   int Management::search(int week, char type) {
+   int Management::search(int no, char type) {
       int foundIdx = -1;
       for (int i = 0; i < m_numGrades; i++) {
-         if (!strcmp(m_grades[i]->getCourse(),m_course) && m_grades[i]->getNo() == week && m_grades[i]->getType() == type) {
+         if (!strcmp(m_grades[i]->getCourse(),m_course) && m_grades[i]->getNo() == no && m_grades[i]->getType() == type) {
             foundIdx = i;
          }
       }
@@ -264,12 +300,12 @@ namespace yh {
    // 2-3 | Delete Grades
    void Management::removeGrades() {
       int foundIdx = -1;
-      int week; char type;
-      cout << "Week : ";
-      cin >> week;
+      int no; char type;
+      cout << "No. : ";
+      cin >> no;
       cout << "Type(W|weekly Q|quiz A|Assignment T|Test): ";
       cin >> type;
-      foundIdx = search(week, type);
+      foundIdx = search(no, type);
       if (foundIdx < 0) {
          cout << "---ERROR: Grade not found" << endl;
       }
@@ -294,9 +330,33 @@ namespace yh {
       }
       m_numGrades--;
    }
-   // 4 | View requirement to Pass
+   // 3 | View requirement to Pass
    void Management::viewRequirements() {
-       cout << *m_require[searchRequirements(m_course)] << endl;
+      cout << endl;
+      m_require[searchRequirements(m_course)]->displayTop(cout);
+      if(searchWeights(m_course, 'W')!=-1) m_weight[searchWeights(m_course, 'W')]->display(cout);
+      if (searchWeights(m_course, 'A') != -1) m_weight[searchWeights(m_course, 'A')]->display(cout);
+      if (searchWeights(m_course, 'Q') != -1) m_weight[searchWeights(m_course, 'Q')]->display(cout);
+      if (searchWeights(m_course, 'T') != -1) m_weight[searchWeights(m_course, 'T')]->display(cout);
+      m_require[searchRequirements(m_course)]->displayBottom(cout);
+      cout << endl;
+   }
+   // 4 | View Grade Chart
+   void Management::gradeChart() {
+      cout << endl;
+      seperatorDouble(cout, 30);
+      cout << "Letter\tPoint\tPercentage" << endl;
+      cout << " A+\t 4.0\t 90~100%" << endl;
+      cout << " A\t 4.0\t 80~89%" << endl;
+      cout << " B+\t 3.5\t 75~79%" << endl;
+      cout << " B\t 3.0\t 70~74%" << endl;
+      cout << " C+\t 2.5\t 65~69%" << endl;
+      cout << " C\t 2.0\t 60~64%" << endl;
+      cout << " D+\t 1.5\t 55~59%" << endl;
+      cout << " D\t 1.0\t 50~54%" << endl;
+      cout << " F\t 0.0\t 0~49%" << endl;
+      seperatorDouble(cout, 30);
+      cout << endl;
    }
 
    // 5 | Change Course
@@ -385,14 +445,17 @@ namespace yh {
       }
       else {
          do {
-            m_require[m_numRequires] = new Requirement();
-            m_require[m_numRequires]->load(datafile);
-            if (m_require[m_numRequires] && !datafile.fail()) {
-               m_numRequires++;
+            if (datafile) {
+               m_require[m_numRequires]= new Requirement();
+               m_require[m_numRequires]->load(datafile);
+               if (m_require[m_numRequires] && !datafile.fail()) {
+                  m_numRequires++;
+               }
+               else {
+                  delete m_require[m_numRequires];
+               }
             }
-            else {
-               delete m_require[m_numRequires];
-            }
+
          } while (datafile);
          datafile.close();
       }
@@ -400,14 +463,77 @@ namespace yh {
       return m_numRequires;
    }
 
+   int Management::loadWeights() {
+      deallocateWeights();
+      ifstream datafile("weight.csv");
+      if (!datafile) {
+         // No file
+         datafile.close();
+         cerr << "--- ERROR: Weight file INACCESIBLE" << endl;
+      }
+      else {
+         do {
+            char ch = datafile.peek();
+            if (ch == '1') {
+               m_weight[m_numWeight] = new Weight();
+            }
+            else if (ch == '0') {
+               m_weight[m_numWeight] = new NotEvenWeight();
+            }
+            else {
+               datafile.setstate(std::ios::failbit);
+            }
+
+            if (datafile) {
+               m_weight[m_numWeight]->load(datafile);
+               if (m_weight[m_numWeight] && !datafile.fail()) {
+                  m_numWeight ++;
+               }
+               else {
+                  delete m_weight[m_numWeight];
+               }
+            }
+         } while (datafile);
+         datafile.close();
+      }
+      cout << m_numWeight << " weights loaded!" << endl;
+      return m_numWeight;
+
+   }
    int Management::searchRequirements(const char* course) {
       int foundIdx = -1;
       for (int i = 0; i < m_numRequires; i++) {
-         if (!strcmp(m_require[i]->getCourse(), m_course)) {
+         if (!strcmp(m_require[i]->getCourse(), m_course) ) {
             foundIdx = i;
          }
       }
       return foundIdx;
+   }
+
+   int Management::searchWeights(const char* course, char type) {
+      int foundIdx = -1;
+      for (int i = 0; i < m_numWeight; i++) {
+         if (!strcmp(m_weight[i]->getCourse(), m_course)&& m_weight[i]->getType()==type) {
+            foundIdx = i;
+         }
+      }
+      return foundIdx;
+   }
+
+
+
+   void Management::letterGrade(double subtotal) {
+      if (subtotal >= 90) cout << "A+ (4.0)";
+      else if (subtotal >= 80) cout << "A (4.0)";
+      else if (subtotal >= 75) cout << "B+ (3.5)";
+      else if (subtotal >= 70) cout << "B (3.0)";
+      else if (subtotal >= 65) cout << "C+ (2.5)";
+      else if (subtotal >= 60) cout << "C (2.0)";
+      else if (subtotal >= 55) cout << "D+ (1.5)";
+      else if (subtotal >= 50) cout << "D (1.0)";
+      else {
+         cout << "F (0.0)";
+      }
    }
 
    // Sorting: Numerically by m_no
@@ -424,10 +550,6 @@ namespace yh {
             }
          }
       }
-      cout << "sorted" << endl;
-   }
-   
-
-
-
+   }   
+   // Sorting: Numerically by total
 }

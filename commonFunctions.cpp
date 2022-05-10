@@ -19,11 +19,11 @@ namespace yh {
       return (char) toupper(character);
    }
    // Display seperator
-   void seperatorDouble() {
-      cout.width(39);
-      cout.fill('=');
-      cout << "=" << endl;
-      cout.fill(' ');
+   void seperatorDouble(std::ostream& ostr, int num) {
+      ostr.width(num);
+      ostr.fill('=');
+      ostr << "=" << endl;
+      ostr.fill(' ');
    }
    // Dynamically allocate and copy string
    void allocateCopy(char*& destination, const char* source) {

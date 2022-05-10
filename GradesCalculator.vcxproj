@@ -142,18 +142,22 @@
     <ClCompile Include="commonFunctions.cpp" />
     <ClCompile Include="GradesCalculator.cpp" />
     <ClCompile Include="Grade.cpp" />
+    <ClCompile Include="iWeight.cpp" />
     <ClCompile Include="Management.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="NotEvenWeight.cpp" />
     <ClCompile Include="Requirement.cpp" />
     <ClCompile Include="Weight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonFunctions.h" />
+    <ClInclude Include="Weight.h" />
     <ClInclude Include="Grade.h" />
+    <ClInclude Include="iWeight.h" />
     <ClInclude Include="Management.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="NotEvenWeight.h" />
     <ClInclude Include="Requirement.h" />
-    <ClInclude Include="Weight.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -118,8 +118,10 @@ namespace yh {
       cout << endl;
       ostr << "No.      | #" << getNo() << endl;
       ostr << "Title    | " << getTitle() <<endl;
-      ostr << "Score    | " << getScore() << endl;
       ostr.setf(std::ios::fixed);
+      cout.precision(1);
+      ostr << "Score    | " << getScore() << endl;
+      cout.precision(0);
       ostr << "Full     | " << getFullMark() << endl;
       ostr.unsetf(std::ios::fixed);
       return ostr;
