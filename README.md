@@ -4,7 +4,7 @@ A program to calculate grades using C++
 Start building since Feb 17, 2022
 
 ## Purpose 
-The program calculates GPA for a semester. With the given requirement to pass the course, it automatically calculates weighted mark for each lab/quizzes/assignment/test and remaining mark to pass the course.  
+The program calculates GPA for a semester. With the given requirement to pass the course, it automatically calculates weighted mark for each Weekly tasks/quizzes/assignment/test and remaining mark to pass the course.  
 
 ## Features
 - Be able to track the best # quizzes/assignments that count for final grades.
@@ -29,8 +29,8 @@ The program calculates GPA for a semester. With the given requirement to pass th
 - Grade   
 - Requirement   
 - iWeight  
-- Weight  
-- NotEvenWeight  
+- Weighted  
+- NotEqualWeighted  
 - commonFunctions  
   
 ## Data file  
