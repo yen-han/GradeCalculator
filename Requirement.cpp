@@ -6,22 +6,22 @@
 #include "commonFunctions.h"
 namespace yh {
     Requirement::Requirement(const Requirement& r) {
-       m_comment1 = nullptr;
-       m_comment2 = nullptr;
+       m_policy1 = nullptr;
+       m_policy2 = nullptr;
          operator=(r);
    }
    Requirement& Requirement::operator=(const Requirement& r) {
       if (this != &r) {
          strcpy(m_courseCode, r.m_courseCode);
          m_overall = r.m_overall;
-         if (r.m_comment1) allocateCopy(m_comment1, r.m_comment1);
-         if(r.m_comment2) allocateCopy(m_comment2, r.m_comment2);
+         if (r.m_policy1) allocateCopy(m_policy1, r.m_policy1);
+         if(r.m_policy2) allocateCopy(m_policy2, r.m_policy2);
       }
       return *this;
    }
    Requirement::~Requirement() {
-      delete[] m_comment1;
-      delete[] m_comment2;
+      delete[] m_policy1;
+      delete[] m_policy2;
    }
 
    const char* Requirement::getCourse() const {
@@ -43,8 +43,8 @@ namespace yh {
    }
 
    std::ostream& Requirement::displayBottom(std::ostream& ostr) const {
-      if (m_comment1) ostr << " " << m_comment1 << std::endl;
-      if (m_comment2) ostr << " " << m_comment2 << std::endl;
+      if (m_policy1) ostr << " " << m_policy1 << std::endl;
+      if (m_policy2) ostr << " " << m_policy2 << std::endl;
       seperatorDouble(ostr, 60);
       return ostr;
    }
@@ -55,12 +55,12 @@ namespace yh {
       ifstr.ignore();
       ifstr >> m_overall;
       ifstr.ignore();
-      delete[] m_comment1;
-      m_comment1 = getDynCstr(ifstr, ',');
-      delete[] m_comment2;
-      m_comment2 = nullptr;
+      delete[] m_policy1;
+      m_policy1 = getDynCstr(ifstr, ',');
+      delete[] m_policy2;
+      m_policy2 = nullptr;
       if (ifstr.peek() != '\n') {
-         m_comment2 = getDynCstr(ifstr);
+         m_policy2 = getDynCstr(ifstr);
       }
       else {
          ifstr.ignore();

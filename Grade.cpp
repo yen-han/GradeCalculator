@@ -1,33 +1,16 @@
-// Create, Read, Update, Delete
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
 #include <fstream>
 #include "Grade.h"
 #include "commonFunctions.h"
-using namespace std;
 namespace yh {
-   //Grade& Grade::resetInfo() {
-   //   m_courseCode[0] = '\0';
-   //   m_no = 0;
-   //   m_type = 'N'; // None
-   //   m_title = nullptr;
-   //   m_score = 0; 
-   //   m_fullMark=0;
-   //   return *this;
-   //}
-
-   //Grade::Grade() {
-   //   resetInfo();
-   //}
- 
    Grade::Grade(const char* courseCode, int no, const char* title, char type, double score, double fullMark) {
-      //resetInfo();
       if (title!= nullptr) {
          strcpy(m_courseCode, courseCode);
          m_no = no;
          m_type = type;
-         setTitle(title);
+         allocateCopy(m_title, title);
          setScore(score);
          setFullMark(fullMark);
       }
@@ -42,7 +25,6 @@ namespace yh {
       deallocate();
    }
    Grade::Grade(const Grade& grade) {
-      //resetInfo();
       if (grade.isValid()) {
          operator=(grade);
       }
@@ -58,25 +40,15 @@ namespace yh {
       }
       return *this;
    }
+
    Grade& Grade::setInfo(const char* courseCode, int no, const char* title, char type, double score, double fullMark) {
-      delete[] m_title;
-      m_title = nullptr;
-      //resetInfo();
       if (title != nullptr) {
          strcpy(m_courseCode, courseCode);
          m_no = no;
          m_type = type;
-         setTitle(title);
+         allocateCopy(m_title, title);
          setScore(score);
          setFullMark(fullMark);
-      }
-      return *this;
-   }
-
-   Grade& Grade::setTitle(const char* title) {
-      if (title != nullptr) {
-         m_title = new char[strlen(title) + 1];
-         strcpy(m_title, title);
       }
       return *this;
    }
@@ -118,20 +90,20 @@ namespace yh {
       m_best = best;
    }
 
-   ostream& Grade::display(ostream& ostr) const {
+   std::ostream& Grade::display(std::ostream& ostr) const {
       ostr << "Type     | " ;
       if (getType() == 'W') ostr << "Weekly";
       if (getType() == 'Q') ostr << "Quiz";
       if (getType() == 'T') ostr << "Test";
       if (getType() == 'A') ostr << "Assign";
-      cout << endl;
-      ostr << "No.      | #" << getNo() << endl;
-      ostr << "Title    | " << getTitle() <<endl;
+      ostr << std::endl;
+      ostr << "No.      | #" << getNo() << std::endl;
+      ostr << "Title    | " << getTitle() << std::endl;
       ostr.setf(std::ios::fixed);
-      cout.precision(1);
-      ostr << "Score    | " << getScore() << endl;
-      cout.precision(0);
-      ostr << "Full     | " << getFullMark() << endl;
+      ostr.precision(1);
+      ostr << "Score    | " << getScore() << std::endl;
+      ostr.precision(0);
+      ostr << "Full     | " << getFullMark() << std::endl;
       ostr.unsetf(std::ios::fixed);
       return ostr;
    }
@@ -163,19 +135,21 @@ namespace yh {
       delete[] m_title;
 
       strcpy(m_courseCode, course);
-      cout << "No. : ";
+      std::cout << "No. : ";
       istr >> m_no;
       do {
-         cout << "Type(W|A|Q|T) : ";
+         std::cout << "Type(W|A|Q|T) : ";
          istr >> m_type;
          istr.ignore();
       } while (!(m_type == 'W' || m_type == 'A' || m_type == 'Q' || m_type == 'T'));
-      cout << "Title : ";
+      std::cout << "Title : ";
       m_title = getDynCstr(istr, '\n');
-      cout << "Score : ";
+      std::cout << "Score : ";
       istr >> m_score;
-      cout << "Full Mark : ";
-      istr >> m_fullMark;
+      do {
+         std::cout << "Full Mark : ";
+         istr >> m_fullMark;
+      } while (m_fullMark < m_score);
       return istr;
    }
 

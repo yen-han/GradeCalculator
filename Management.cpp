@@ -5,8 +5,8 @@
 #include "Management.h"
 #include "commonFunctions.h"
 #include "Menu.h"
-#include "Weight.h"
-#include "NotEvenWeight.h"
+#include "Weighted.h"
+#include "NotEqualWeighted.h"
 using namespace std;
 namespace yh {
    void Management::deallocateGrades() {
@@ -15,7 +15,6 @@ namespace yh {
       }
       m_numGrades = 0;
    }
-
    void Management::deallocateRequirements() {
       for (int i = 0; i < m_numRequires; i++) {
          delete m_require[i];
@@ -48,7 +47,7 @@ namespace yh {
          cout << "Course: " << (m_course[0] == '\0' ? "N/A" : m_course) << endl;
          cout << "-------------------------------" << endl;
          selection = subMenu.run();
-         if ((selection == 1 || selection==2||selection==3) && m_course[0] == '\0') selection = 5;
+         if ((selection == 1 || selection == 2||selection == 3) && m_course[0] == '\0') selection = 5;
 
          switch (selection) {
             // 1 | View Grades
@@ -83,18 +82,21 @@ namespace yh {
    }
    // 1 | View Grades
    void Management::viewGrades() {
-      int foundWeight = searchWeights(m_course, 'W');
-      int foundRequire = searchRequirements(m_course);
       double subtotal = 0;
-      cout << endl <<"<< "<< m_weight[foundWeight]->getRequireName() << " >>" << endl;
-      subtotal += viewTypeGrades('W', foundWeight);
-      cout << endl << endl;
+      int foundRequire = searchRequirements(m_course);
 
+      int foundWeight = searchWeights(m_course, 'W');
+      if (foundWeight > -1) {
+         cout << endl << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
+         subtotal += viewTypeGrades('W', foundWeight);
+         cout << endl << endl;
+      }
       foundWeight = searchWeights(m_course, 'A');
-      cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
-      subtotal += viewTypeGrades('A', foundWeight);
-      cout << endl << endl;
-
+      if (foundWeight > -1) {
+         cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
+         subtotal += viewTypeGrades('A', foundWeight);
+         cout << endl << endl;
+      }
       foundWeight = searchWeights(m_course, 'Q');
       if (foundWeight > -1) {
          cout << "<< " << m_weight[foundWeight]->getRequireName() << " >>" << endl;
@@ -501,10 +503,10 @@ namespace yh {
          do {
             char ch = datafile.peek();
             if (ch == '1') {
-               m_weight[m_numWeight] = new Weight();
+               m_weight[m_numWeight] = new Weighted();
             }
             else if (ch == '0') {
-               m_weight[m_numWeight] = new NotEvenWeight();
+               m_weight[m_numWeight] = new NotEqualWeighted();
             }
             else {
                datafile.setstate(std::ios::failbit);
@@ -598,7 +600,7 @@ namespace yh {
 
          }
          for (i = 0, j = 0; j < m_weight[foundWeight]->getCount() && i < m_numGrades; i++) {
-            if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type ) {
+            if (!strcmp(m_grades[i]->getCourse(), m_course) && m_grades[i]->getType() == type) {
                m_grades[i]->setBest(1);
                j++;
             }

@@ -4,8 +4,8 @@ namespace yh {
    class Requirement {
       char m_courseCode[10]{};
       double m_overall{};
-      char* m_comment1{};
-      char* m_comment2{};
+      char* m_policy1{};
+      char* m_policy2{};
 
    public:
       Requirement() {};

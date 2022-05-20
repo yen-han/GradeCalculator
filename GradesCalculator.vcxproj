@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,18 +146,18 @@
     <ClCompile Include="iWeight.cpp" />
     <ClCompile Include="Management.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="NotEvenWeight.cpp" />
+    <ClCompile Include="NotEqualWeighted.cpp" />
     <ClCompile Include="Requirement.cpp" />
-    <ClCompile Include="Weight.cpp" />
+    <ClCompile Include="Weighted.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonFunctions.h" />
-    <ClInclude Include="Weight.h" />
+    <ClInclude Include="Weighted.h" />
     <ClInclude Include="Grade.h" />
     <ClInclude Include="iWeight.h" />
     <ClInclude Include="Management.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="NotEvenWeight.h" />
+    <ClInclude Include="NotEqualWeighted.h" />
     <ClInclude Include="Requirement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

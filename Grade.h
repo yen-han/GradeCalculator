@@ -4,11 +4,11 @@ namespace yh {
    class Grade {
       char m_courseCode[10]{};
       int m_no{}; // To sort
-      char m_type = 'N'; // L:Lab Q: quiz, T: test, A: assignment, N: none
+      char m_type = 'N'; // W:Weekly Q:Quiz T:Test, A:Assignment, N:None
       char* m_title{};
       double m_score{};
       double m_fullMark{};
-      int m_best{}; // 1:Best 0:Drop
+      int m_best{}; // 1:Count 0:Drop
    public:
       // Constructors
       Grade() {};
@@ -20,14 +20,10 @@ namespace yh {
       // Copy assignment
       Grade& operator=(const Grade& grade);
 
-      // Reset recognized invalid state
-      //Grade& resetInfo();
       // Deallocate m_title
       void deallocate();
       // Create & SET GRADE
       Grade& setInfo(const char* courseCode, int no, const char* title, char type, double score = 0, double fullMark = 100);
-      // Create & SET TITLE
-      Grade& setTitle(const char* title);
       // Create & SET SCORE 
       Grade& setScore(double score);
       // Create & SET FULL MARK 

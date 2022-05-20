@@ -27,7 +27,7 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Weight.cpp">
+    <ClCompile Include="Weighted.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Management.cpp">
@@ -39,7 +39,7 @@
     <ClCompile Include="iWeight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NotEvenWeight.cpp">
+    <ClCompile Include="NotEqualWeighted.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,10 +62,10 @@
     <ClInclude Include="iWeight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NotEvenWeight.h">
+    <ClInclude Include="NotEqualWeighted.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Weight.h">
+    <ClInclude Include="Weighted.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,10 +7,14 @@ namespace yh {
 
    // Convert character of lowercase to CHRACTER OF UPPERCASE
    char toUpperCharacter(char character);
+   // Draw the number of seperator=
    void seperatorDouble(std::ostream& ostr, int num);
+   // Copy character array dynamically
    void allocateCopy(char*& desc, const char* src);
-   int getint(int min, int max);
+   // Receive string & allocate dynamically
    char* getDynCstr(std::istream& istr, char delim='\n');
+   // Receive integer within range
+   int getint(int min, int max);
 }
 
 #endif // !YH_COMMONFUNCTIONS_H_

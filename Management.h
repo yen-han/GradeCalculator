@@ -4,7 +4,7 @@
 #include "Requirement.h"
 #include "iWeight.h"
 namespace yh {
-   const int max = 100;
+   const int max = 200;
 
    class Management {
       char* m_file{};

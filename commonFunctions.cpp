@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
-#include <cctype>
 #include "commonFunctions.h"
 using namespace std;
 namespace yh {
@@ -18,14 +17,14 @@ namespace yh {
    char toUpperCharacter(char character) {
       return (char) toupper(character);
    }
-   // Display seperator
+   // Draw the number of seperator=
    void seperatorDouble(std::ostream& ostr, int num) {
       ostr.width(num);
       ostr.fill('=');
       ostr << "=" << endl;
       ostr.fill(' ');
    }
-   // Dynamically allocate and copy string
+   // Copy character array dynamically
    void allocateCopy(char*& destination, const char* source) {
       delete[] destination;
       destination = nullptr;
@@ -34,6 +33,15 @@ namespace yh {
          strcpy(destination, source);
       }
    }
+   // Receive string & allocate dynamically
+   char* getDynCstr(std::istream& istr, char delim) {
+      char* cstr{};
+      std::string str;
+      getline(istr, str, delim);
+      if (istr) allocateCopy(cstr, str.c_str());
+      return cstr;
+   }
+   // Receive integer within range
    int getint(int min, int max) {
       int num;
       bool done;
@@ -52,13 +60,5 @@ namespace yh {
          }
       } while (!done);
       return num;
-   }
-   // Get string input to create dynamic cstring
-   char* getDynCstr(std::istream& istr, char delim) {
-      char* cstr{};
-      std::string str;
-      getline(istr, str, delim);
-      if (istr) allocateCopy(cstr, str.c_str());
-      return cstr;
    }
 }
